@@ -26,6 +26,7 @@ public class College {
     @Column(nullable = false)
     private List<Course> courses = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "college" , cascade = CascadeType.ALL)
     private List<Professor> professors = new ArrayList<>();
 
