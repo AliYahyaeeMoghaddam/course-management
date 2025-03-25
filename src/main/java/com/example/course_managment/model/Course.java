@@ -30,8 +30,8 @@ public class Course {
     public Course(String course_name, int unit, College college , Professor professor) {
         this.course_name = course_name;
         this.unit = unit;
-        this.college = college;
-        this.professor = professor;
+        this.setCollege(college);
+        this.setProfessor(professor);
     }
 
     public String getCourse_name() {
@@ -56,5 +56,21 @@ public class Course {
 
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+
+    public College getCollege() {
+        return college;
+    }
+
+    public void setCollege(College college) {
+        this.college = college;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
     }
 }

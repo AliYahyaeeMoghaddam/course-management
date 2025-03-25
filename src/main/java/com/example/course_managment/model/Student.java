@@ -47,7 +47,7 @@ public class Student {
         this.student_lastName = student_lastName;
         this.national_code = national_code;
         this.Address = Address;
-        this.clg = clg;
+        this.setClg(clg);
     }
 
     public Long getStudent_id() {
@@ -96,5 +96,21 @@ public class Student {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public College getClg() {
+        return clg;
+    }
+
+    public void setClg(College clg) {
+        this.clg = clg;
+    }
+
+    public List<Professor> getProfessors() {
+        return professors;
+    }
+
+    public void setProfessors(List<Professor> professors) {
+        this.professors = professors;
     }
 }

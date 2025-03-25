@@ -1,7 +1,6 @@
 package com.example.course_managment.model;
 
 import jakarta.persistence.*;
-import org.apache.catalina.Manager;
 import jakarta.validation.constraints.*;
 
 
@@ -50,7 +49,7 @@ public class Professor {
         this.prof_name = prof_name;
         this.prof_lastName = prof_lastName;
         this.national_code = national_code;
-        this.college = college;
+        this.setCollege(college);
     }
 
 
@@ -92,5 +91,29 @@ public class Professor {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public College getManager() {
+        return manager;
+    }
+
+    public void setManager(College manager) {
+        this.manager = manager;
+    }
+
+    public College getCollege() {
+        return college;
+    }
+
+    public void setCollege(College college) {
+        this.college = college;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }
