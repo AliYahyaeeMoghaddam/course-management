@@ -1,8 +1,10 @@
 package com.example.course_managment.service;
 
 import com.example.course_managment.model.College;
+import com.example.course_managment.model.Course;
 import com.example.course_managment.model.Student;
 import com.example.course_managment.repository.CollegeRepository;
+import com.example.course_managment.repository.CourseRepository;
 import com.example.course_managment.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,13 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final CollegeRepository collegeRepository;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public StudentService (StudentRepository studentRepository, CollegeRepository collegeRepository) {
+    public StudentService (StudentRepository studentRepository, CollegeRepository collegeRepository, CourseRepository courseRepository) {
         this.studentRepository = studentRepository;
         this.collegeRepository = collegeRepository;
+        this.courseRepository = courseRepository;
     }
 
     public Student createStudent(String firstName, String lastName,
@@ -67,6 +71,35 @@ public class StudentService {
 
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
+    }
+
+    public Student CourseRegistrationByStudent (Long stud_id, Long course_id) {
+        Student stud = studentRepository.findById(stud_id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Course crs = courseRepository.findById(course_id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        stud.getCourses().add(crs);
+
+        return studentRepository.save(stud);
+    }
+
+    public Student DeletingLessonByStudent(Long stud_id, Long course_id){
+        Student stud = studentRepository.findById(stud_id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Course crs = courseRepository.findById(course_id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        stud.getCourses().remove(crs);
+
+        return studentRepository.save(stud);
+    }
+
+    public List<Course> getStudentCourses(Long student_id) {
+        Student stud = studentRepository.findById(student_id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        return stud.getCourses();
     }
 
 }

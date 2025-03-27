@@ -16,12 +16,15 @@ public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
     private final CollegeRepository collegeRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public ProfessorService(ProfessorRepository professorRepository ,
-                            CollegeRepository collegeRepository) {
+    public ProfessorService(ProfessorRepository professorRepository,
+                            CollegeRepository collegeRepository,
+                            StudentRepository studentRepository) {
         this.professorRepository = professorRepository;
         this.collegeRepository = collegeRepository;
+        this.studentRepository = studentRepository;
     }
 
     public Professor createProfessor(String firstName, String lastName,
@@ -68,6 +71,34 @@ public class ProfessorService {
 
     public void deleteProfessor(Long id){
         professorRepository.deleteById(id);
+    }
+
+    public Professor AddingStudentByProfessor (Long prof_id, Long student_id){
+        Professor professor = professorRepository.findById(prof_id)
+                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+        Student student = studentRepository.findById(student_id)
+                .orElseThrow(() -> new RuntimeException("Student Not Found"));
+
+        professor.getStudents().add(student);
+
+        return professorRepository.save(professor);
+    }
+
+    public Professor DeleteStudentByProfessor (Long prof_id, Long student_id){
+        Professor professor = professorRepository.findById(prof_id)
+                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+        Student student = studentRepository.findById(student_id)
+                .orElseThrow(() -> new RuntimeException("Student Not Found"));
+
+        professor.getStudents().remove(student);
+
+        return professorRepository.save(professor);
+    }
+
+    public List<Student> getStudentsOfProfessor(Long prof_id){
+        Professor professor = professorRepository.findById(prof_id)
+                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+        return professor.getStudents();
     }
 
 }
