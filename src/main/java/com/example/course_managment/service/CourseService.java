@@ -27,7 +27,7 @@ public class CourseService {
         this.professorRepository = professorRepository;
     }
 
-    public Course createCourse(String name , int unit , Long college_id , Long professor_id ) {
+    public Course createCourse(String name , int unit , Long college_id , Long professor_id) {
         College clg = collegeRepository.findById(college_id)
                 .orElseThrow(() -> new RuntimeException("College not found"));
         Professor prof = professorRepository.findById(professor_id)

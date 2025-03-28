@@ -84,7 +84,7 @@ public class StudentService {
         return studentRepository.save(stud);
     }
 
-    public Student DeletingLessonByStudent(Long stud_id, Long course_id){
+    public Student DeletingCourseByStudent(Long stud_id, Long course_id){
         Student stud = studentRepository.findById(stud_id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         Course crs = courseRepository.findById(course_id)
