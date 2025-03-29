@@ -40,6 +40,9 @@ public class Student {
     @ManyToMany(mappedBy = "students")
     private List<Professor> professors = new ArrayList<>();
 
+    @OneToMany(mappedBy = "student")
+    private List<GradeCourse> gradeCourses = new ArrayList<>();
+
 
     public Student() {}
     public Student(String student_name, String student_lastName, Long national_code, String Address , College clg) {
@@ -112,5 +115,13 @@ public class Student {
 
     public void setProfessors(List<Professor> professors) {
         this.professors = professors;
+    }
+
+    public List<GradeCourse> getGradeCourses() {
+        return gradeCourses;
+    }
+
+    public void setGradeCourses(List<GradeCourse> gradeCourses) {
+        this.gradeCourses = gradeCourses;
     }
 }

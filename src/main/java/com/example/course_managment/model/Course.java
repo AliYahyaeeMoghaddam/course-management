@@ -26,6 +26,10 @@ public class Course {
     @JoinColumn(name = "crs_id")
     private Professor professor;
 
+    @OneToMany(mappedBy = "course")
+    private List<GradeCourse> gradeCourse = new ArrayList<>();
+
+
     public Course() {}
     public Course(String course_name, int unit, College college , Professor professor) {
         this.course_name = course_name;
@@ -72,5 +76,13 @@ public class Course {
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+
+    public List<GradeCourse> getGradeCourse() {
+        return gradeCourse;
+    }
+
+    public void setGradeCourse(List<GradeCourse> gradeCourse) {
+        this.gradeCourse = gradeCourse;
     }
 }
