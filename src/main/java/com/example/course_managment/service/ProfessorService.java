@@ -1,5 +1,8 @@
 package com.example.course_managment.service;
 
+import com.example.course_managment.exception.CollegeNotFoundException;
+import com.example.course_managment.exception.ProfessorNotFoundException;
+import com.example.course_managment.exception.StudentNotFoundException;
 import com.example.course_managment.model.College;
 import com.example.course_managment.model.Professor;
 import com.example.course_managment.model.Student;
@@ -30,7 +33,7 @@ public class ProfessorService {
     public Professor createProfessor(String firstName, String lastName,
                                      Long national_code, Long college_id) {
         College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new RuntimeException("College not found"));
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
 
         Professor professor = new Professor();
         professor.setProf_name(firstName);
@@ -47,7 +50,7 @@ public class ProfessorService {
 
     public Professor getProfessorById(Long id){
         return professorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + id + "not found !"));
     }
 
     public List<Professor> getProfessorsByCollegeId(Long college_id){
@@ -57,9 +60,9 @@ public class ProfessorService {
     public Professor updateProfessor(Long id, String firstName, String lastName,
                                      Long national_code, Long college_id) {
         Professor prof = professorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + id + "not found !"));
         College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new RuntimeException("College not found"));
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
 
         prof.setProf_name(firstName);
         prof.setProf_lastName(lastName);
@@ -75,9 +78,9 @@ public class ProfessorService {
 
     public Professor AddingStudentByProfessor (Long prof_id, Long student_id){
         Professor professor = professorRepository.findById(prof_id)
-                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + prof_id + " not found !"));
         Student student = studentRepository.findById(student_id)
-                .orElseThrow(() -> new RuntimeException("Student Not Found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + student_id + " not found !"));
 
         professor.getStudents().add(student);
 
@@ -86,9 +89,9 @@ public class ProfessorService {
 
     public Professor DeleteStudentByProfessor (Long prof_id, Long student_id){
         Professor professor = professorRepository.findById(prof_id)
-                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + prof_id + "not found !"));
         Student student = studentRepository.findById(student_id)
-                .orElseThrow(() -> new RuntimeException("Student Not Found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + student_id + " not found !"));
 
         professor.getStudents().remove(student);
 
@@ -97,7 +100,7 @@ public class ProfessorService {
 
     public List<Student> getStudentsOfProfessor(Long prof_id){
         Professor professor = professorRepository.findById(prof_id)
-                .orElseThrow(() -> new RuntimeException("Professor Not Found"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + prof_id + "not found !"));
         return professor.getStudents();
     }
 

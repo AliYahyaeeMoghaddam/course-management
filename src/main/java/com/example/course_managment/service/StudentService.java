@@ -1,5 +1,8 @@
 package com.example.course_managment.service;
 
+import com.example.course_managment.exception.CollegeNotFoundException;
+import com.example.course_managment.exception.CourseNotFoundException;
+import com.example.course_managment.exception.StudentNotFoundException;
 import com.example.course_managment.model.College;
 import com.example.course_managment.model.Course;
 import com.example.course_managment.model.Student;
@@ -28,7 +31,7 @@ public class StudentService {
     public Student createStudent(String firstName, String lastName,
                                  Long national_code, String address, Long college_id) {
         College college = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new RuntimeException("College not found"));
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
 
         Student student = new Student();
         student.setStudent_name(firstName);
@@ -42,7 +45,7 @@ public class StudentService {
 
     public Student getStudentById(Long id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found !"));
     }
 
     public List<Student> getAllStudents() {
@@ -56,9 +59,9 @@ public class StudentService {
     public Student updateStudent(Long id , String firstName, String lastName,
                                  Long national_code, String address, Long college_id) {
         Student stud = studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found !"));
         College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new RuntimeException("College not found"));
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID " + id + " not found !"));
 
         stud.setStudent_name(firstName);
         stud.setStudent_lastName(lastName);
@@ -75,9 +78,9 @@ public class StudentService {
 
     public Student CourseRegistrationByStudent (Long stud_id, Long course_id) {
         Student stud = studentRepository.findById(stud_id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
         Course crs = courseRepository.findById(course_id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_id + " not found !"));
 
         stud.getCourses().add(crs);
 
@@ -86,9 +89,9 @@ public class StudentService {
 
     public Student DeletingCourseByStudent(Long stud_id, Long course_id){
         Student stud = studentRepository.findById(stud_id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
         Course crs = courseRepository.findById(course_id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_id + " not found !"));
 
         stud.getCourses().remove(crs);
 
@@ -97,7 +100,7 @@ public class StudentService {
 
     public List<Course> getStudentCourses(Long student_id) {
         Student stud = studentRepository.findById(student_id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student with ID " + student_id + " not found !"));
 
         return stud.getCourses();
     }

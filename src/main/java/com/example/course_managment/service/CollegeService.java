@@ -1,5 +1,9 @@
 package com.example.course_managment.service;
 
+import com.example.course_managment.dto.CollegeDTO;
+import com.example.course_managment.dto.StudentDTO;
+import com.example.course_managment.exception.CollegeNotFoundException;
+import com.example.course_managment.exception.ProfessorNotFoundException;
 import com.example.course_managment.model.College;
 import com.example.course_managment.model.Professor;
 import com.example.course_managment.repository.CollegeRepository;
@@ -23,7 +27,7 @@ public class CollegeService {
 
     public College createCollege(String name , Long professor_id) {
         Professor prof = professorRepository.findById(professor_id)
-                .orElseThrow(() -> new RuntimeException("professor not found !"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
 
         College college = new College();
         college.setName(name);
@@ -32,9 +36,11 @@ public class CollegeService {
         return collegeRepository.save(college);
     }
 
-    public College getCollegeById(Long id) {
-        return collegeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("college not found !"));
+    public CollegeDTO getCollegeById(Long id) {
+        College college = collegeRepository.findById(id)
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + id + "not found !"));
+//        List<StudentDTO> students = college.getStudents().stream()
+//                .map()
     }
 
     public List<College> getAllColleges() {
@@ -43,14 +49,14 @@ public class CollegeService {
 
     public College getCollegeByName(String name) {
         return collegeRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("college not found !"));
+                .orElseThrow(() -> new CollegeNotFoundException("college with name" + name + "not found !"));
     }
 
     public College updateCollege(Long id, String name , Long professor_id) {
         College clg = collegeRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("college not found !"));
+                        .orElseThrow(() -> new CollegeNotFoundException("college with ID" + id + "not found !"));
         Professor prof = professorRepository.findById(professor_id)
-                        .orElseThrow(() -> new RuntimeException("professor not found !"));
+                        .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
 
         clg.setName(name);
         clg.setClg_manager(prof);

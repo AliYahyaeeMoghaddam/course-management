@@ -1,5 +1,8 @@
 package com.example.course_managment.service;
 
+import com.example.course_managment.exception.CollegeNotFoundException;
+import com.example.course_managment.exception.CourseNotFoundException;
+import com.example.course_managment.exception.ProfessorNotFoundException;
 import com.example.course_managment.model.College;
 import com.example.course_managment.model.Course;
 import com.example.course_managment.model.Professor;
@@ -29,9 +32,9 @@ public class CourseService {
 
     public Course createCourse(String name , int unit , Long college_id , Long professor_id) {
         College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new RuntimeException("College not found"));
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
         Professor prof = professorRepository.findById(professor_id)
-                .orElseThrow(() -> new RuntimeException("Professor not found"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
 
         Course course = new Course();
         course.setCourse_name(name);
@@ -48,7 +51,7 @@ public class CourseService {
 
     public Course getCourseById(Long id) {
         return courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + id + "not found !"));
     }
 
     public List<Course> getCourseByCollegeId(Long college_id) {
@@ -63,11 +66,11 @@ public class CourseService {
                                Long college_id ,
                                Long professor_id ) {
         Course crs = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + id + "not found !"));
         College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new RuntimeException("College not found"));
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
         Professor prof = professorRepository.findById(professor_id)
-                .orElseThrow(() -> new RuntimeException("Professor not found"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
 
         crs.setCourse_name(name);
         crs.setUnit(unit);
