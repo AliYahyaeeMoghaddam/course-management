@@ -7,22 +7,10 @@ import java.util.List;
 public class CollegeDTO {
 
     private String name;
-    private Professor clg_manager;
-    private List<StudentDTO> students;
-    private List<CourseDTO> courses;
-    private List<ProfessorDTO> professors;
-
-    public CollegeDTO() {}
-    public CollegeDTO(String name, Professor clg_manager,
-                      List<StudentDTO> students , List<CourseDTO> courses
-                      , List<ProfessorDTO> professors) {
-        this.setName(name);
-        this.setClg_manager(clg_manager);
-        this.setStudents(students);
-        this.setCourses(courses);
-        this.setProfessors(professors);
-    }
-
+    private ProfessorSimpleDTO clg_manager;
+    private List<Long> studentId;
+    private List<String> courseName;
+    private List<Long> professorId;
 
     public String getName() {
         return name;
@@ -32,35 +20,35 @@ public class CollegeDTO {
         this.name = name;
     }
 
-    public Professor getClg_manager() {
+    public ProfessorSimpleDTO getClg_manager() {
         return clg_manager;
     }
 
-    public void setClg_manager(Professor clg_manager) {
+    public void setClg_manager(ProfessorSimpleDTO clg_manager) {
         this.clg_manager = clg_manager;
     }
 
-    public List<StudentDTO> getStudents() {
-        return students;
+    public List<Long> getStudents() {
+        return studentId;
     }
 
-    public void setStudents(List<StudentDTO> students) {
-        this.students = students;
+    public void setStudents(List<Long> studentId) {
+        this.studentId = studentId;
     }
 
-    public List<CourseDTO> getCourses() {
-        return courses;
+    public List<String> getCourses() {
+        return courseName;
     }
 
-    public void setCourses(List<CourseDTO> courses) {
-        this.courses = courses;
+    public void setCourses(List<String> courseName) {
+        this.courseName = courseName;
     }
 
-    public List<ProfessorDTO> getProfessors() {
-        return professors;
+    public List<Long> getProfessors() {
+        return professorId;
     }
 
-    public void setProfessors(List<ProfessorDTO> professors) {
-        this.professors = professors;
+    public void setProfessors(List<Long> professorId) {
+        this.professorId = professorId;
     }
 }

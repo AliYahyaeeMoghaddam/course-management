@@ -7,23 +7,10 @@ public class ProfessorDTO {
     private Long prof_id;
     private String prof_name;
     private String prof_lastName;
-    private CollegeDTO manager;
-    private CollegeDTO college;
-    private List<StudentSimpleDTO> students;
-    private List<CourseDTO> courses;
-
-    public ProfessorDTO() {}
-    public ProfessorDTO(Long prof_id, String prof_name, String prof_lastName,
-                        CollegeDTO manager, CollegeDTO college , List<StudentSimpleDTO> students,
-                        List<CourseDTO> courses) {
-        this.setProf_id(prof_id);
-        this.setProf_name(prof_name);
-        this.setProf_lastName(prof_lastName);
-        this.setManager(manager);
-        this.setCollege(college);
-        this.setStudents(students);
-        this.setCourses(courses);
-    }
+    private Long manager;//college manager
+    private Long college;
+    private List<Long> studentIds;
+    private List<Long> courseIds;
 
     public Long getProf_id() {
         return prof_id;
@@ -49,35 +36,35 @@ public class ProfessorDTO {
         this.prof_lastName = prof_lastName;
     }
 
-    public CollegeDTO getManager() {
+    public Long getManager() {
         return manager;
     }
 
-    public void setManager(CollegeDTO manager) {
+    public void setManager(Long manager) {
         this.manager = manager;
     }
 
-    public CollegeDTO getCollege() {
+    public Long getCollege() {
         return college;
     }
 
-    public void setCollege(CollegeDTO college) {
+    public void setCollege(Long college) {
         this.college = college;
     }
 
-    public List<StudentSimpleDTO> getStudents() {
-        return students;
+    public List<Long> getStudentIds() {
+        return studentIds;
     }
 
-    public void setStudents(List<StudentSimpleDTO> students) {
-        this.students = students;
+    public void setStudentIds(List<Long> studentIds) {
+        this.studentIds = studentIds;
     }
 
-    public List<CourseDTO> getCourses() {
-        return courses;
+    public List<Long> getCourseIds() {
+        return courseIds;
     }
 
-    public void setCourses(List<CourseDTO> courses) {
-        this.courses = courses;
+    public void setCourseIds(List<Long> courseIds) {
+        this.courseIds = courseIds;
     }
 }

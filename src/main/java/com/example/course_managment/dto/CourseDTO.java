@@ -6,10 +6,11 @@ public class CourseDTO {
 
     private String course_name;
     private int unit;
-    private List<StudentSimpleDTO> students;
-    private CollegeDTO college;
-    private ProfessorDTO professor;
-    private List<GradeCourseDTO> gradeCourse;
+    private List<Long> studentIds;
+    private String collegeName;
+    private Long professorId;
+    private List<Long> gradeCourseIds;
+
 
     public String getCourse_name() {
         return course_name;
@@ -27,35 +28,35 @@ public class CourseDTO {
         this.unit = unit;
     }
 
-    public List<StudentSimpleDTO> getStudents() {
-        return students;
+    public List<Long> getStudentIds() {
+        return studentIds;
     }
 
-    public void setStudents(List<StudentSimpleDTO> students) {
-        this.students = students;
+    public void setStudentIds(List<Long> studentIds) {
+        this.studentIds = studentIds;
     }
 
-    public CollegeDTO getCollege() {
-        return college;
+    public String getCollegeName() {
+        return collegeName;
     }
 
-    public void setCollege(CollegeDTO college) {
-        this.college = college;
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
     }
 
-    public ProfessorDTO getProfessor() {
-        return professor;
+    public Long getProfessorId() {
+        return professorId;
     }
 
-    public void setProfessor(ProfessorDTO professor) {
-        this.professor = professor;
+    public void setProfessorId(Long professorId) {
+        this.professorId = professorId;
     }
 
-    public List<GradeCourseDTO> getGradeCourse() {
-        return gradeCourse;
+    public List<Long> getGradeCourseIds() {
+        return gradeCourseIds;
     }
 
-    public void setGradeCourse(List<GradeCourseDTO> gradeCourse) {
-        this.gradeCourse = gradeCourse;
+    public void setGradeCourseIds(List<Long> gradeCourseIds) {
+        this.gradeCourseIds = gradeCourseIds;
     }
 }
