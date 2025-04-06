@@ -7,10 +7,10 @@ public class ProfessorDTO {
     private Long prof_id;
     private String prof_name;
     private String prof_lastName;
-    private Long manager;//college manager
-    private Long college;
+    //private Long manager;//college manager
+    private String college;
     private List<Long> studentIds;
-    private List<Long> courseIds;
+    private List<String> courseNames;
 
     public Long getProf_id() {
         return prof_id;
@@ -36,19 +36,19 @@ public class ProfessorDTO {
         this.prof_lastName = prof_lastName;
     }
 
-    public Long getManager() {
-        return manager;
-    }
+//    public Long getManager() {
+//        return manager;
+//    }
+//
+//    public void setManager(Long manager) {
+//        this.manager = manager;
+//    }
 
-    public void setManager(Long manager) {
-        this.manager = manager;
-    }
-
-    public Long getCollege() {
+    public String getCollege() {
         return college;
     }
 
-    public void setCollege(Long college) {
+    public void setCollege(String college) {
         this.college = college;
     }
 
@@ -60,11 +60,11 @@ public class ProfessorDTO {
         this.studentIds = studentIds;
     }
 
-    public List<Long> getCourseIds() {
-        return courseIds;
+    public List<String> getCourseNames() {
+        return courseNames;
     }
 
-    public void setCourseIds(List<Long> courseIds) {
-        this.courseIds = courseIds;
+    public void setCourseNames(List<String> courseNames) {
+        this.courseNames = courseNames;
     }
 }

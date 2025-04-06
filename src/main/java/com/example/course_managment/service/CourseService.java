@@ -1,18 +1,22 @@
 package com.example.course_managment.service;
 
+import com.example.course_managment.dto.CourseDTO;
 import com.example.course_managment.exception.CollegeNotFoundException;
 import com.example.course_managment.exception.CourseNotFoundException;
 import com.example.course_managment.exception.ProfessorNotFoundException;
+import com.example.course_managment.mapper.CourseMapper;
 import com.example.course_managment.model.College;
 import com.example.course_managment.model.Course;
 import com.example.course_managment.model.Professor;
 import com.example.course_managment.repository.CollegeRepository;
 import com.example.course_managment.repository.CourseRepository;
 import com.example.course_managment.repository.ProfessorRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -30,7 +34,8 @@ public class CourseService {
         this.professorRepository = professorRepository;
     }
 
-    public Course createCourse(String name , int unit , Long college_id , Long professor_id) {
+    @Transactional
+    public CourseDTO createCourse(String name , int unit , Long college_id , Long professor_id) {
         College clg = collegeRepository.findById(college_id)
                 .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
         Professor prof = professorRepository.findById(professor_id)
@@ -42,27 +47,43 @@ public class CourseService {
         course.setCollege(clg);
         course.setProfessor(prof);
 
-        return courseRepository.save(course);
+        Course savedCourse = courseRepository.save(course);
+        return CourseMapper.toDTO(savedCourse);
     }
 
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    @Transactional
+    public List<CourseDTO> getAllCourses() {
+        return courseRepository.findAll()
+                .stream()
+                .map(CourseMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Course getCourseById(Long id) {
-        return courseRepository.findById(id)
+    @Transactional
+    public CourseDTO getCourseById(Long id) {
+        Course crs = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException("Course with ID" + id + "not found !"));
+        return CourseMapper.toDTO(crs);
     }
 
-    public List<Course> getCourseByCollegeId(Long college_id) {
-        return courseRepository.findByCollegeId(college_id);
+    @Transactional
+    public List<CourseDTO> getCourseByCollegeId(Long college_id) {
+        return courseRepository.findByCollegeId(college_id)
+                .stream()
+                .map(CourseMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Course> getCourseByProfessorId(Long professor_id) {
-        return courseRepository.findByProfessorId(professor_id);
+    @Transactional
+    public List<CourseDTO> getCourseByProfessorId(Long professor_id) {
+        return courseRepository.findByProfessorId(professor_id)
+                .stream()
+                .map(CourseMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Course updateCourse(Long id ,String name , int unit ,
+    @Transactional
+    public CourseDTO updateCourse(Long id ,String name , int unit ,
                                Long college_id ,
                                Long professor_id ) {
         Course crs = courseRepository.findById(id)
@@ -77,9 +98,11 @@ public class CourseService {
         crs.setCollege(clg);
         crs.setProfessor(prof);
 
-        return courseRepository.save(crs);
+        Course savedCourse = courseRepository.save(crs);
+        return CourseMapper.toDTO(savedCourse);
     }
 
+    @Transactional
     public void deleteCourse(Long id) {
         courseRepository.deleteById(id);
     }

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class CollegeMapper {
 
-    public CollegeDTO toDTO(College college){
+    public static CollegeDTO toDTO(College college){
         CollegeDTO dto = new CollegeDTO();
         dto.setName(college.getName());
 

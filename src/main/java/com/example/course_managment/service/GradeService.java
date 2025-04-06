@@ -1,7 +1,10 @@
 package com.example.course_managment.service;
 
+import com.example.course_managment.dto.GradeCourseDTO;
+import com.example.course_managment.mapper.GradeCourseMapper;
 import com.example.course_managment.model.GradeCourse;
 import com.example.course_managment.repository.GradeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +20,8 @@ public class GradeService {
         this.gradeRepository = gradeRepository;
     }
 
-    public GradeCourse addGrade(Long student_id, Long course_id, Long grade) {
+    @Transactional
+    public GradeCourseDTO addGrade(Long student_id, Long course_id, Long grade) {
         Optional<GradeCourse> gradeCourse = gradeRepository.findByStudentIdAndCourseId(student_id,course_id);
 
         if (!gradeCourse.isPresent()) {
@@ -26,7 +30,9 @@ public class GradeService {
 
         GradeCourse grade_crs = gradeCourse.get();
         grade_crs.setGarde(grade);
-        return gradeRepository.save(grade_crs);
+        GradeCourse savedGrade = gradeRepository.save(grade_crs);
+
+        return GradeCourseMapper.toDTO(savedGrade);
     }
 
 }

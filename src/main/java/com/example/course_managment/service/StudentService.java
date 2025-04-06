@@ -1,18 +1,24 @@
 package com.example.course_managment.service;
 
+import com.example.course_managment.dto.CourseDTO;
+import com.example.course_managment.dto.StudentDTO;
 import com.example.course_managment.exception.CollegeNotFoundException;
 import com.example.course_managment.exception.CourseNotFoundException;
 import com.example.course_managment.exception.StudentNotFoundException;
+import com.example.course_managment.mapper.CourseMapper;
+import com.example.course_managment.mapper.StudentMapper;
 import com.example.course_managment.model.College;
 import com.example.course_managment.model.Course;
 import com.example.course_managment.model.Student;
 import com.example.course_managment.repository.CollegeRepository;
 import com.example.course_managment.repository.CourseRepository;
 import com.example.course_managment.repository.StudentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -28,8 +34,9 @@ public class StudentService {
         this.courseRepository = courseRepository;
     }
 
-    public Student createStudent(String firstName, String lastName,
-                                 Long national_code, String address, Long college_id) {
+    @Transactional
+    public StudentDTO createStudent(String firstName, String lastName,
+                                    Long national_code, String address, Long college_id) {
         College college = collegeRepository.findById(college_id)
                 .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
 
@@ -40,23 +47,35 @@ public class StudentService {
         student.setAddress(address);
         student.setClg(college);
 
-        return studentRepository.save(student);
+        Student savedStudent = studentRepository.save(student);
+        return StudentMapper.toDTO(savedStudent);
     }
 
-    public Student getStudentById(Long id) {
-        return studentRepository.findById(id)
+    @Transactional
+    public StudentDTO getStudentById(Long id) {
+        Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found !"));
+        return StudentMapper.toDTO(student);
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    @Transactional
+    public List<StudentDTO> getAllStudents() {
+        return studentRepository.findAll()
+                .stream()
+                .map(StudentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Student> getStudentsByCollegeId(Long college_id) {
-        return studentRepository.findByCollegeId(college_id);
+    @Transactional
+    public List<StudentDTO> getStudentsByCollegeId(Long college_id) {
+        return studentRepository.findByCollegeId(college_id)
+                .stream()
+                .map(StudentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Student updateStudent(Long id , String firstName, String lastName,
+    @Transactional
+    public StudentDTO updateStudent(Long id , String firstName, String lastName,
                                  Long national_code, String address, Long college_id) {
         Student stud = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found !"));
@@ -69,14 +88,17 @@ public class StudentService {
         stud.setAddress(address);
         stud.setClg(clg);
 
-        return studentRepository.save(stud);
+        Student savedStudent = studentRepository.save(stud);
+        return StudentMapper.toDTO(savedStudent);
     }
 
+    @Transactional
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
     }
 
-    public Student CourseRegistrationByStudent (Long stud_id, Long course_id) {
+    @Transactional
+    public StudentDTO CourseRegistrationByStudent (Long stud_id, Long course_id) {
         Student stud = studentRepository.findById(stud_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
         Course crs = courseRepository.findById(course_id)
@@ -84,10 +106,12 @@ public class StudentService {
 
         stud.getCourses().add(crs);
 
-        return studentRepository.save(stud);
+        Student savedStudent = studentRepository.save(stud);
+        return StudentMapper.toDTO(savedStudent);
     }
 
-    public Student DeletingCourseByStudent(Long stud_id, Long course_id){
+    @Transactional
+    public StudentDTO DeletingCourseByStudent(Long stud_id, Long course_id){
         Student stud = studentRepository.findById(stud_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
         Course crs = courseRepository.findById(course_id)
@@ -95,14 +119,19 @@ public class StudentService {
 
         stud.getCourses().remove(crs);
 
-        return studentRepository.save(stud);
+        Student savedStudent = studentRepository.save(stud);
+        return StudentMapper.toDTO(savedStudent);
     }
 
-    public List<Course> getStudentCourses(Long student_id) {
+    @Transactional
+    public List<CourseDTO> getStudentCourses(Long student_id) {
         Student stud = studentRepository.findById(student_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + student_id + " not found !"));
 
-        return stud.getCourses();
+        return stud.getCourses()
+                .stream()
+                .map(CourseMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 }

@@ -3,7 +3,7 @@ package com.example.course_managment.dto;
 public class CreateCollegeDTO {
 
     private String name;
-    private Long prof_manager;
+    private Long prof_managerId;
 
     public String getName() {
         return name;
@@ -13,11 +13,11 @@ public class CreateCollegeDTO {
         this.name = name;
     }
 
-    public Long getProf_manager() {
-        return prof_manager;
+    public Long getProf_managerId() {
+        return prof_managerId;
     }
 
-    public void setProf_manager(Long prof_manager) {
-        this.prof_manager = prof_manager;
+    public void setProf_managerId(Long prof_managerId) {
+        this.prof_managerId = prof_managerId;
     }
 }

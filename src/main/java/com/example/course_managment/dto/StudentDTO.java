@@ -7,7 +7,7 @@ public class StudentDTO {
     private Long student_id;
     private String student_name;
     private String student_lastName;
-    private List<Long> courseIds;
+    private List<String> courseNames;
     private String clgName;
     private List<Long> professorIds;
     private List<Long> gradeCourseIds;
@@ -36,12 +36,12 @@ public class StudentDTO {
         this.student_lastName = student_lastName;
     }
 
-    public List<Long> getCourseIds() {
-        return courseIds;
+    public List<String> getCourseNAmes() {
+        return courseNames;
     }
 
-    public void setCourseIds(List<Long> courseIds) {
-        this.courseIds = courseIds;
+    public void setCourseNames(List<String> courseNames) {
+        this.courseNames = courseNames;
     }
 
     public String getClgName() {

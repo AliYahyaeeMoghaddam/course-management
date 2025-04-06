@@ -4,7 +4,7 @@ public class GradeCourseDTO {
 
     private Long id;
     private Long studentId;
-    private Long courseId;
+    private String courseName;
     private Long garde;
 
     public Long getId() {
@@ -31,11 +31,11 @@ public class GradeCourseDTO {
         this.studentId = studentId;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public String getCourseName() {
+        return courseName;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 }
