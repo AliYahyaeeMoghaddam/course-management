@@ -1,5 +1,6 @@
 package com.example.course_managment.controller;
 
+import com.example.course_managment.dto.CollegeDTO;
 import com.example.course_managment.model.College;
 import com.example.course_managment.service.CollegeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,39 +21,39 @@ public class CollegeController {
     }
 
     @PostMapping
-    public ResponseEntity<College> createCollege(@RequestParam String name, @RequestParam Long prof_id) {
-        College clg = collegeService.createCollege(name, prof_id);
+    public ResponseEntity<CollegeDTO> createCollege(@RequestParam String name, @RequestParam Long prof_id) {
+        CollegeDTO clg = collegeService.createCollege(name, prof_id);
         return ResponseEntity.ok(clg);
     }
 
     @GetMapping
-    public ResponseEntity<List<College>> getAllColleges() {
+    public ResponseEntity<List<CollegeDTO>> getAllColleges() {
         return ResponseEntity.ok(collegeService.getAllColleges());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<College>  getCollegeById(@PathVariable Long id){
-        College clg = collegeService.getCollegeById(id);
-        return ResponseEntity.ok(clg);
-    }
-
     @GetMapping("/{name}")
-    public ResponseEntity<College> getCollegeByName(@PathVariable String name) {
-        College clg = collegeService.getCollegeByName(name);
+    public ResponseEntity<CollegeDTO>  getCollegeByName(@PathVariable String name){
+        CollegeDTO clg = collegeService.getCollegeByName(name);
         return ResponseEntity.ok(clg);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<College> updateCollege(@PathVariable Long id,
-                                                 @RequestParam String name,
+//    @GetMapping("/{name}")
+//    public ResponseEntity<CollegeDTO> getCollegeByName(@PathVariable String name) {
+//        CollegeDTO clg = collegeService.getCollegeByName(name);
+//        return ResponseEntity.ok(clg);
+//    }
+
+    @PutMapping("/{name}")
+    public ResponseEntity<CollegeDTO> updateCollege(@PathVariable String name,
+                                                 @RequestParam String newName,
                                                  @RequestParam Long prof_id){
-        College clg = collegeService.updateCollege(id, name, prof_id);
+        CollegeDTO clg = collegeService.updateCollege(name, newName, prof_id);
         return ResponseEntity.ok(clg);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteCollegeById(@PathVariable Long id){
-        collegeService.deleteCollege(id);
+    @DeleteMapping("/{name}")
+    public void deleteCollegeByName(@PathVariable String name){
+        collegeService.deleteCollege(name);
     }
 
 }

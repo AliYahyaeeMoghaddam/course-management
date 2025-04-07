@@ -1,5 +1,6 @@
 package com.example.course_managment.controller;
 
+import com.example.course_managment.dto.GradeCourseDTO;
 import com.example.course_managment.model.GradeCourse;
 import com.example.course_managment.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class GradeController {
     }
 
     @PostMapping
-    public ResponseEntity<GradeCourse> addGrade(Long student_id, Long course_id, Long grade) {
-        GradeCourse gradeCourse = gradeService.addGrade(student_id, course_id, grade);
+    public ResponseEntity<GradeCourseDTO> addGrade(Long student_id, Long grade) {
+        GradeCourseDTO gradeCourse = gradeService.addGrade(student_id, grade);
         return ResponseEntity.ok(gradeCourse);
     }
 

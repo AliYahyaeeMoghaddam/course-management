@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CollegeRepository extends JpaRepository<College, Long> {
     Optional<College> findByName(String name);
+
+    void deleteByName(String name);
 }

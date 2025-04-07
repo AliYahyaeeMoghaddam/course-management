@@ -38,9 +38,9 @@ public class ProfessorService {
 
     @Transactional
     public ProfessorDTO createProfessor(String firstName, String lastName,
-                                        Long national_code, Long college_id) {
-        College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
+                                        Long national_code, String college_name) {
+        College clg = collegeRepository.findByName(college_name)
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
 
         Professor professor = new Professor();
         professor.setProf_name(firstName);
@@ -68,8 +68,8 @@ public class ProfessorService {
     }
 
     @Transactional
-    public List<ProfessorDTO> getProfessorsByCollegeId(Long college_id){
-        return professorRepository.findByCollegeId(college_id)
+    public List<ProfessorDTO> getProfessorsByCollegeName(String college_name){
+        return professorRepository.findByCollegeName(college_name)
                 .stream()
                 .map(ProfessorMapper::toDTO)
                 .collect(Collectors.toList());
@@ -77,11 +77,11 @@ public class ProfessorService {
 
     @Transactional
     public ProfessorDTO updateProfessor(Long id, String firstName, String lastName,
-                                     Long national_code, Long college_id) {
+                                     Long national_code, String  college_name) {
         Professor prof = professorRepository.findById(id)
                 .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + id + "not found !"));
-        College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
+        College clg = collegeRepository.findByName(college_name)
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
 
         prof.setProf_name(firstName);
         prof.setProf_lastName(lastName);

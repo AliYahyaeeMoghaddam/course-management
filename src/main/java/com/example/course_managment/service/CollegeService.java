@@ -1,8 +1,6 @@
 package com.example.course_managment.service;
 
 import com.example.course_managment.dto.CollegeDTO;
-import com.example.course_managment.dto.CreateCollegeDTO;
-import com.example.course_managment.dto.StudentDTO;
 import com.example.course_managment.exception.CollegeNotFoundException;
 import com.example.course_managment.exception.ProfessorNotFoundException;
 import com.example.course_managment.mapper.CollegeMapper;
@@ -14,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,12 +28,12 @@ public class CollegeService {
     }
 
     @Transactional
-    public CollegeDTO createCollege(CreateCollegeDTO createCollegeDTO) {
-        Professor prof = professorRepository.findById(createCollegeDTO.getProf_managerId())
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + createCollegeDTO.getProf_managerId() + " not found !"));
+    public CollegeDTO createCollege(String name, Long prof_id) {
+        Professor prof = professorRepository.findById(prof_id)
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + prof_id + " not found !"));
 
         College college = new College();
-        college.setName(createCollegeDTO.getName());
+        college.setName(name);
         college.setClg_manager(prof);
 
         College savedCollege = collegeRepository.save(college);
@@ -44,9 +41,9 @@ public class CollegeService {
     }
 
     @Transactional
-    public CollegeDTO getCollegeById(Long id) {
-        College college = collegeRepository.findById(id)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + id + "not found !"));
+    public CollegeDTO getCollegeByName(String name) {
+        College college = collegeRepository.findByName(name)
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + name + "not found !"));
         return CollegeMapper.toDTO(college);
     }
 
@@ -58,17 +55,17 @@ public class CollegeService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public CollegeDTO getCollegeByName(String name) {
-        College college = collegeRepository.findByName(name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with name" + name + "not found !"));
-        return CollegeMapper.toDTO(college);
-    }
+//    @Transactional
+//    public CollegeDTO getCollegeByName(String name) {
+//        College college = collegeRepository.findByName(name)
+//                .orElseThrow(() -> new CollegeNotFoundException("college with name" + name + "not found !"));
+//        return CollegeMapper.toDTO(college);
+//    }
 
     @Transactional
-    public CollegeDTO updateCollege(Long id, String name , Long professor_id) {
-        College clg = collegeRepository.findById(id)
-                        .orElseThrow(() -> new CollegeNotFoundException("college with ID" + id + "not found !"));
+    public CollegeDTO updateCollege(String name, String newName , Long professor_id) {
+        College clg = collegeRepository.findByName(name)
+                        .orElseThrow(() -> new CollegeNotFoundException("college with ID" + name + "not found !"));
         Professor prof = professorRepository.findById(professor_id)
                         .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
 
@@ -80,8 +77,8 @@ public class CollegeService {
     }
 
     @Transactional
-    public void deleteCollege(Long id) {
-        collegeRepository.deleteById(id);
+    public void deleteCollege(String name) {
+        collegeRepository.deleteByName(name);
     }
 
 }

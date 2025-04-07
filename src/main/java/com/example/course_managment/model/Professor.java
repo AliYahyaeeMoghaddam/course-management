@@ -12,7 +12,7 @@ import java.util.List;
 public class Professor {
 
     @Id
-    private Long prof_id;
+    private Long id;
 
     @Column(nullable = false)
     @Pattern(regexp = "^[a-zA-Zآ-ی]+$")
@@ -29,7 +29,7 @@ public class Professor {
     private College manager;
 
     @ManyToOne
-    @JoinColumn(name = "prof_id" ,nullable = false)
+    @JoinColumn(name = "college_name" ,nullable = false)
     private College college;
 
     @ManyToMany
@@ -54,11 +54,11 @@ public class Professor {
 
 
     public Long getProf_id() {
-        return prof_id;
+        return id;
     }
 
-    public void setProf_id(Long prof_id) {
-        this.prof_id = prof_id;
+    public void setProf_id(Long id) {
+        this.id = id;
     }
 
     public String getProf_name() {

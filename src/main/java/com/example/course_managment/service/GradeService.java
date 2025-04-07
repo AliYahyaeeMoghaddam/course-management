@@ -21,8 +21,8 @@ public class GradeService {
     }
 
     @Transactional
-    public GradeCourseDTO addGrade(Long student_id, Long course_id, Long grade) {
-        Optional<GradeCourse> gradeCourse = gradeRepository.findByStudentIdAndCourseId(student_id,course_id);
+    public GradeCourseDTO addGrade(Long student_id, Long grade) {
+        Optional<GradeCourse> gradeCourse = gradeRepository.findByStudentId(student_id);
 
         if (!gradeCourse.isPresent()) {
             throw new RuntimeException("grade course not found");

@@ -10,7 +10,7 @@ import java.util.List;
 public class Course {
 
     @Id
-    private String course_name;
+    private String courseName;
 
     @Column(nullable = false)
     private int unit;
@@ -23,7 +23,7 @@ public class Course {
     private College college;
 
     @ManyToOne
-    @JoinColumn(name = "crs_id")
+    @JoinColumn(name = "course_id")
     private Professor professor;
 
     @OneToMany(mappedBy = "course")
@@ -32,18 +32,18 @@ public class Course {
 
     public Course() {}
     public Course(String course_name, int unit, College college , Professor professor) {
-        this.course_name = course_name;
+        this.courseName = course_name;
         this.unit = unit;
         this.setCollege(college);
         this.setProfessor(professor);
     }
 
     public String getCourse_name() {
-        return course_name;
+        return courseName;
     }
 
     public void setCourse_name(String course_name) {
-        this.course_name = course_name;
+        this.courseName = course_name;
     }
 
     public int getUnit() {

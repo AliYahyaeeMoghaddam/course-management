@@ -36,9 +36,9 @@ public class StudentService {
 
     @Transactional
     public StudentDTO createStudent(String firstName, String lastName,
-                                    Long national_code, String address, Long college_id) {
-        College college = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
+                                    Long national_code, String address, String college_name) {
+        College college = collegeRepository.findByName(college_name)
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
 
         Student student = new Student();
         student.setStudent_name(firstName);
@@ -67,8 +67,8 @@ public class StudentService {
     }
 
     @Transactional
-    public List<StudentDTO> getStudentsByCollegeId(Long college_id) {
-        return studentRepository.findByCollegeId(college_id)
+    public List<StudentDTO> getStudentsByCollegeName(String college_name) {
+        return studentRepository.findStudentByClgName(college_name)
                 .stream()
                 .map(StudentMapper::toDTO)
                 .collect(Collectors.toList());
@@ -76,10 +76,10 @@ public class StudentService {
 
     @Transactional
     public StudentDTO updateStudent(Long id , String firstName, String lastName,
-                                 Long national_code, String address, Long college_id) {
+                                 Long national_code, String address, String college_name) {
         Student stud = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found !"));
-        College clg = collegeRepository.findById(college_id)
+        College clg = collegeRepository.findByName(college_name)
                 .orElseThrow(() -> new CollegeNotFoundException("college with ID " + id + " not found !"));
 
         stud.setStudent_name(firstName);
@@ -98,11 +98,11 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDTO CourseRegistrationByStudent (Long stud_id, Long course_id) {
+    public StudentDTO CourseRegistrationByStudent (Long stud_id, String course_name) {
         Student stud = studentRepository.findById(stud_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
-        Course crs = courseRepository.findById(course_id)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_id + " not found !"));
+        Course crs = courseRepository.findByCourseName(course_name)
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_name + " not found !"));
 
         stud.getCourses().add(crs);
 
@@ -111,11 +111,11 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDTO DeletingCourseByStudent(Long stud_id, Long course_id){
+    public StudentDTO DeletingCourseByStudent(Long stud_id, String course_name){
         Student stud = studentRepository.findById(stud_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
-        Course crs = courseRepository.findById(course_id)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_id + " not found !"));
+        Course crs = courseRepository.findByCourseName(course_name)
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_name + " not found !"));
 
         stud.getCourses().remove(crs);
 

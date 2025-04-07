@@ -10,7 +10,7 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long student_id;
+    private Long id;
 
     @Column(nullable = false , length = 48)
     private String student_name;
@@ -43,7 +43,6 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<GradeCourse> gradeCourses = new ArrayList<>();
 
-م
     public Student() {}
     public Student(String student_name, String student_lastName, Long national_code, String Address , College clg) {
         this.student_name = student_name;
@@ -54,11 +53,11 @@ public class Student {
     }
 
     public Long getStudent_id() {
-        return student_id;
+        return id;
     }
 
     public void setStudent_id(Long student_id) {
-        this.student_id = student_id;
+        this.id = student_id;
     }
 
     public String getStudent_name() {

@@ -1,5 +1,7 @@
 package com.example.course_managment.controller;
 
+import com.example.course_managment.dto.ProfessorDTO;
+import com.example.course_managment.dto.StudentDTO;
 import com.example.course_managment.model.Professor;
 import com.example.course_managment.model.Student;
 import com.example.course_managment.service.ProfessorService;
@@ -21,36 +23,36 @@ public class ProfessorController {
     }
 
     @PostMapping
-    public ResponseEntity<Professor> createProfessor(@RequestParam String firstName, @RequestParam String lastName,
-                                                     @RequestParam Long national_code, @RequestParam Long college_id) {
-        Professor prof = professorService.createProfessor(firstName, lastName, national_code, college_id);
+    public ResponseEntity<ProfessorDTO> createProfessor(@RequestParam String firstName, @RequestParam String lastName,
+                                                        @RequestParam Long national_code, @RequestParam String college_name) {
+        ProfessorDTO prof = professorService.createProfessor(firstName, lastName, national_code, college_name);
         return ResponseEntity.ok(prof);
     }
 
     @GetMapping
-    public ResponseEntity<List<Professor>> getAllProfessor() {
-        List<Professor> profs = professorService.getAllProfessors();
+    public ResponseEntity<List<ProfessorDTO>> getAllProfessor() {
+        List<ProfessorDTO> profs = professorService.getAllProfessors();
         return ResponseEntity.ok(profs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Professor> getProfessorById(@PathVariable long id) {
-        Professor prof = professorService.getProfessorById(id);
+    public ResponseEntity<ProfessorDTO> getProfessorById(@PathVariable long id) {
+        ProfessorDTO prof = professorService.getProfessorById(id);
         return ResponseEntity.ok(prof);
     }
 
-    @GetMapping("/{college_id}")
-    public ResponseEntity<List<Professor>> getProfessorByCollegeId(@PathVariable long college_id) {
-        List<Professor> profs = professorService.getProfessorsByCollegeId(college_id);
+    @GetMapping("/{college_name}")
+    public ResponseEntity<List<ProfessorDTO>> getProfessorByCollegeId(@PathVariable String college_name) {
+        List<ProfessorDTO> profs = professorService.getProfessorsByCollegeName(college_name);
         return ResponseEntity.ok(profs);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Professor> updateProfessor(@PathVariable Long id, @RequestParam String firstName,
+    public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id, @RequestParam String firstName,
                                                      @RequestParam String lastName,
                                                      @RequestParam Long national_code,
-                                                     @RequestParam Long college_id){
-        Professor prof = professorService.updateProfessor(id, firstName, lastName, national_code, college_id);
+                                                     @RequestParam String college_name){
+        ProfessorDTO prof = professorService.updateProfessor(id, firstName, lastName, national_code, college_name);
         return ResponseEntity.ok(prof);
     }
 
@@ -73,8 +75,8 @@ public class ProfessorController {
     }
 
     @GetMapping("/{prof_id}/students")
-    public ResponseEntity<List<Student>> getStudentsOfProfessor(@PathVariable Long prof_id){
-        List<Student> students = professorService.getStudentsOfProfessor(prof_id);
+    public ResponseEntity<List<StudentDTO>> getStudentsOfProfessor(@PathVariable Long prof_id){
+        List<StudentDTO> students = professorService.getStudentsOfProfessor(prof_id);
         return ResponseEntity.ok(students);
     }
 

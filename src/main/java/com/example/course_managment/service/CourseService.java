@@ -35,9 +35,9 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseDTO createCourse(String name , int unit , Long college_id , Long professor_id) {
-        College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
+    public CourseDTO createCourse(String name , int unit , String college_name , Long professor_id) {
+        College clg = collegeRepository.findByName(college_name)
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
         Professor prof = professorRepository.findById(professor_id)
                 .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
 
@@ -60,15 +60,15 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseDTO getCourseById(Long id) {
-        Course crs = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + id + "not found !"));
+    public CourseDTO getCourseByName(String name) {
+        Course crs = courseRepository.findByCourseName(name)
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + name + "not found !"));
         return CourseMapper.toDTO(crs);
     }
 
     @Transactional
-    public List<CourseDTO> getCourseByCollegeId(Long college_id) {
-        return courseRepository.findByCollegeId(college_id)
+    public List<CourseDTO> getCourseByCollegeName(String college_name) {
+        return courseRepository.findByCollegeName(college_name)
                 .stream()
                 .map(CourseMapper::toDTO)
                 .collect(Collectors.toList());
@@ -83,17 +83,17 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseDTO updateCourse(Long id ,String name , int unit ,
-                               Long college_id ,
+    public CourseDTO updateCourse(String lastName ,String newName , int unit ,
+                               String college_name ,
                                Long professor_id ) {
-        Course crs = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + id + "not found !"));
-        College clg = collegeRepository.findById(college_id)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_id + "not found !"));
+        Course crs = courseRepository.findByCourseName(lastName)
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + lastName + "not found !"));
+        College clg = collegeRepository.findByName(college_name)
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
         Professor prof = professorRepository.findById(professor_id)
                 .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
 
-        crs.setCourse_name(name);
+        crs.setCourse_name(newName);
         crs.setUnit(unit);
         crs.setCollege(clg);
         crs.setProfessor(prof);
@@ -103,8 +103,8 @@ public class CourseService {
     }
 
     @Transactional
-    public void deleteCourse(Long id) {
-        courseRepository.deleteById(id);
+    public void deleteCourse(String name) {
+        courseRepository.deleteByCourseName(name);
     }
 
 }
