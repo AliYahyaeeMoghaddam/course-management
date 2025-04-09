@@ -21,10 +21,9 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<CourseDTO> createCourse(@RequestParam String name , @RequestParam int unit ,
-                                                  @RequestParam String college_name , @RequestParam Long professor_id) {
-        CourseDTO course = courseService.createCourse(name, unit, college_name, professor_id);
-        return ResponseEntity.ok(course);
+    public ResponseEntity<CourseDTO> createCourse(@RequestBody Course course) {
+        CourseDTO crs = courseService.createCourse(course);
+        return ResponseEntity.ok(crs);
     }
 
     @GetMapping
@@ -53,11 +52,8 @@ public class CourseController {
 
     @PutMapping("/{name}")
     public ResponseEntity<CourseDTO> updateCourse(@PathVariable String name ,
-                                               @RequestParam String newName ,
-                                               @RequestParam int unit ,
-                                               @RequestParam String college_name ,
-                                               @RequestParam Long professor_id){
-        CourseDTO crs = courseService.updateCourse(name, newName, unit, college_name, professor_id);
+                                               @RequestBody Course course) {
+        CourseDTO crs = courseService.updateCourse(name, course);
         return ResponseEntity.ok(crs);
     }
 

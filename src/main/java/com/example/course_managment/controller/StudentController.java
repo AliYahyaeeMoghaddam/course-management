@@ -23,10 +23,8 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentDTO> createStudent(@RequestParam String firstName, @RequestParam String lastName,
-                                                    @RequestParam Long national_code, @RequestParam String address,
-                                                    @RequestParam String college_name) {
-        StudentDTO stud = studentService.createStudent(firstName, lastName, national_code, address, college_name);
+    public ResponseEntity<StudentDTO> createStudent(@RequestBody Student student) {
+        StudentDTO stud = studentService.createStudent(student);
         return ResponseEntity.ok(stud);
     }
 
@@ -49,11 +47,8 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id , @RequestParam String firstName,
-                                                 @RequestParam String lastName,
-                                                 @RequestParam Long national_code, @RequestParam String address,
-                                                 @RequestParam String college_name) {
-        StudentDTO stud = studentService.updateStudent(id, firstName, lastName, national_code, address, college_name);
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id , @RequestBody Student student) {
+        StudentDTO stud = studentService.updateStudent(id, student);
         return ResponseEntity.ok(stud);
     }
 

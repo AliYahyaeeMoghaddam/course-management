@@ -11,7 +11,7 @@ import java.util.List;
 public class College {
 
     @Id
-    @Column(length = 5-48)
+    @Size(min = 5, max = 48)
     @Pattern(regexp = "^[a-zA-Z0-9آ-ی]+$")
     private String name;
 

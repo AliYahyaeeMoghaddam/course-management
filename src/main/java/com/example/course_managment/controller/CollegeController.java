@@ -21,8 +21,8 @@ public class CollegeController {
     }
 
     @PostMapping
-    public ResponseEntity<CollegeDTO> createCollege(@RequestParam String name, @RequestParam Long prof_id) {
-        CollegeDTO clg = collegeService.createCollege(name, prof_id);
+    public ResponseEntity<CollegeDTO> createCollege(@RequestBody College college) {
+        CollegeDTO clg = collegeService.createCollege(college);
         return ResponseEntity.ok(clg);
     }
 
@@ -45,9 +45,8 @@ public class CollegeController {
 
     @PutMapping("/{name}")
     public ResponseEntity<CollegeDTO> updateCollege(@PathVariable String name,
-                                                 @RequestParam String newName,
-                                                 @RequestParam Long prof_id){
-        CollegeDTO clg = collegeService.updateCollege(name, newName, prof_id);
+                                                 @RequestBody College college) {
+        CollegeDTO clg = collegeService.updateCollege(name, college);
         return ResponseEntity.ok(clg);
     }
 

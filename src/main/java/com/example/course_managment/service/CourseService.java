@@ -35,19 +35,19 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseDTO createCourse(String name , int unit , String college_name , Long professor_id) {
-        College clg = collegeRepository.findByName(college_name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
-        Professor prof = professorRepository.findById(professor_id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
+    public CourseDTO createCourse(Course course) {
+        College clg = collegeRepository.findByName(course.getCollege().getName())
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + course.getCollege().getName() + "not found !"));
+        Professor prof = professorRepository.findById(course.getProfessor().getProf_id())
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + course.getProfessor().getProf_id() + "not found !"));
 
-        Course course = new Course();
-        course.setCourse_name(name);
-        course.setUnit(unit);
-        course.setCollege(clg);
-        course.setProfessor(prof);
+        Course crs = new Course();
+        crs.setCourse_name(course.getCourse_name());
+        crs.setUnit(course.getUnit());
+        crs.setCollege(clg);
+        crs.setProfessor(prof);
 
-        Course savedCourse = courseRepository.save(course);
+        Course savedCourse = courseRepository.save(crs);
         return CourseMapper.toDTO(savedCourse);
     }
 
@@ -83,18 +83,16 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseDTO updateCourse(String lastName ,String newName , int unit ,
-                               String college_name ,
-                               Long professor_id ) {
-        Course crs = courseRepository.findByCourseName(lastName)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + lastName + "not found !"));
-        College clg = collegeRepository.findByName(college_name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
-        Professor prof = professorRepository.findById(professor_id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
+    public CourseDTO updateCourse(String name ,Course course) {
+        Course crs = courseRepository.findByCourseName(name)
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + name + "not found !"));
+        College clg = collegeRepository.findByName(course.getCollege().getName())
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + course.getCollege().getName() + "not found !"));
+        Professor prof = professorRepository.findById(course.getProfessor().getProf_id())
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + course.getProfessor().getProf_id() + "not found !"));
 
-        crs.setCourse_name(newName);
-        crs.setUnit(unit);
+        crs.setCourse_name(course.getCourse_name());
+        crs.setUnit(course.getUnit());
         crs.setCollege(clg);
         crs.setProfessor(prof);
 

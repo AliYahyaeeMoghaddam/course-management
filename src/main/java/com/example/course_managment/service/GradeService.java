@@ -21,15 +21,15 @@ public class GradeService {
     }
 
     @Transactional
-    public GradeCourseDTO addGrade(Long student_id, Long grade) {
-        Optional<GradeCourse> gradeCourse = gradeRepository.findByStudentId(student_id);
+    public GradeCourseDTO addGrade(GradeCourse gradeCourse) {
+        Optional<GradeCourse> gradeCrs = gradeRepository.findByStudentId(gradeCourse.getStudent().getStudent_id());
 
-        if (!gradeCourse.isPresent()) {
+        if (!gradeCrs.isPresent()) {
             throw new RuntimeException("grade course not found");
         }
 
-        GradeCourse grade_crs = gradeCourse.get();
-        grade_crs.setGarde(grade);
+        GradeCourse grade_crs = gradeCrs.get();
+        grade_crs.setGarde(grade_crs.getGarde());
         GradeCourse savedGrade = gradeRepository.save(grade_crs);
 
         return GradeCourseMapper.toDTO(savedGrade);

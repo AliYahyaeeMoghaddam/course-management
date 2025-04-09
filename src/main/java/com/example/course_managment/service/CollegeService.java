@@ -28,15 +28,15 @@ public class CollegeService {
     }
 
     @Transactional
-    public CollegeDTO createCollege(String name, Long prof_id) {
-        Professor prof = professorRepository.findById(prof_id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + prof_id + " not found !"));
+    public CollegeDTO createCollege(College college) {
+        Professor prof = professorRepository.findById(college.getClg_manager().getProf_id())
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + college.getClg_manager().getProf_id() + " not found !"));
 
-        College college = new College();
-        college.setName(name);
-        college.setClg_manager(prof);
+        College clg = new College();
+        clg.setName(college.getName());
+        clg.setClg_manager(prof);
 
-        College savedCollege = collegeRepository.save(college);
+        College savedCollege = collegeRepository.save(clg);
         return CollegeMapper.toDTO(savedCollege);
     }
 
@@ -63,13 +63,13 @@ public class CollegeService {
 //    }
 
     @Transactional
-    public CollegeDTO updateCollege(String name, String newName , Long professor_id) {
+    public CollegeDTO updateCollege(String name, College college) {
         College clg = collegeRepository.findByName(name)
                         .orElseThrow(() -> new CollegeNotFoundException("college with ID" + name + "not found !"));
-        Professor prof = professorRepository.findById(professor_id)
-                        .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + professor_id + "not found !"));
+        Professor prof = professorRepository.findById(college.getClg_manager().getProf_id())
+                        .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + college.getClg_manager().getProf_id() + "not found !"));
 
-        clg.setName(name);
+        clg.setName(college.getName());
         clg.setClg_manager(prof);
 
         College savedCollege = collegeRepository.save(clg);

@@ -37,18 +37,17 @@ public class ProfessorService {
     }
 
     @Transactional
-    public ProfessorDTO createProfessor(String firstName, String lastName,
-                                        Long national_code, String college_name) {
-        College clg = collegeRepository.findByName(college_name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
+    public ProfessorDTO createProfessor(Professor professor) {
+        College clg = collegeRepository.findByName(professor.getCollege().getName())
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + professor.getCollege().getName() + "not found !"));
 
-        Professor professor = new Professor();
-        professor.setProf_name(firstName);
-        professor.setProf_lastName(lastName);
-        professor.setNational_code(national_code);
-        professor.setCollege(clg);
+        Professor prof = new Professor();
+        prof.setProf_name(professor.getProf_name());
+        prof.setProf_lastName(professor.getProf_lastName());
+        prof.setNational_code(professor.getNational_code());
+        prof.setCollege(clg);
 
-        Professor savedProfessor = professorRepository.save(professor);
+        Professor savedProfessor = professorRepository.save(prof);
         return ProfessorMapper.toDTO(savedProfessor);
     }
 
@@ -76,16 +75,15 @@ public class ProfessorService {
     }
 
     @Transactional
-    public ProfessorDTO updateProfessor(Long id, String firstName, String lastName,
-                                     Long national_code, String  college_name) {
+    public ProfessorDTO updateProfessor(Long id, Professor professor) {
         Professor prof = professorRepository.findById(id)
                 .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + id + "not found !"));
-        College clg = collegeRepository.findByName(college_name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
+        College clg = collegeRepository.findByName(professor.getCollege().getName())
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + professor.getCollege().getName() + "not found !"));
 
-        prof.setProf_name(firstName);
-        prof.setProf_lastName(lastName);
-        prof.setNational_code(national_code);
+        prof.setProf_name(professor.getProf_name());
+        prof.setProf_lastName(professor.getProf_lastName());
+        prof.setNational_code(professor.getNational_code());
         prof.setCollege(clg);
 
         Professor savedProfessor = professorRepository.save(prof);

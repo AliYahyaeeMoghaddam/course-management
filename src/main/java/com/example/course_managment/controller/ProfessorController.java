@@ -23,9 +23,8 @@ public class ProfessorController {
     }
 
     @PostMapping
-    public ResponseEntity<ProfessorDTO> createProfessor(@RequestParam String firstName, @RequestParam String lastName,
-                                                        @RequestParam Long national_code, @RequestParam String college_name) {
-        ProfessorDTO prof = professorService.createProfessor(firstName, lastName, national_code, college_name);
+    public ResponseEntity<ProfessorDTO> createProfessor(@RequestBody Professor professor) {
+        ProfessorDTO prof = professorService.createProfessor(professor);
         return ResponseEntity.ok(prof);
     }
 
@@ -48,11 +47,8 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id, @RequestParam String firstName,
-                                                     @RequestParam String lastName,
-                                                     @RequestParam Long national_code,
-                                                     @RequestParam String college_name){
-        ProfessorDTO prof = professorService.updateProfessor(id, firstName, lastName, national_code, college_name);
+    public ResponseEntity<ProfessorDTO> updateProfessor(@PathVariable Long id, @RequestBody Professor professor) {
+        ProfessorDTO prof = professorService.updateProfessor(id, professor);
         return ResponseEntity.ok(prof);
     }
 

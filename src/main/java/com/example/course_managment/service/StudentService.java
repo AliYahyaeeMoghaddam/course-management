@@ -35,19 +35,18 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDTO createStudent(String firstName, String lastName,
-                                    Long national_code, String address, String college_name) {
-        College college = collegeRepository.findByName(college_name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + college_name + "not found !"));
+    public StudentDTO createStudent(Student student) {
+        College college = collegeRepository.findByName(student.getClg().getName())
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + student.getClg().getName() + "not found !"));
 
-        Student student = new Student();
-        student.setStudent_name(firstName);
-        student.setStudent_lastName(lastName);
-        student.setNational_code(national_code);
-        student.setAddress(address);
-        student.setClg(college);
+        Student stud = new Student();
+        stud.setStudent_name(student.getStudent_name());
+        stud.setStudent_lastName(student.getStudent_lastName());
+        stud.setNational_code(student.getNational_code());
+        stud.setAddress(student.getAddress());
+        stud.setClg(college);
 
-        Student savedStudent = studentRepository.save(student);
+        Student savedStudent = studentRepository.save(stud);
         return StudentMapper.toDTO(savedStudent);
     }
 
@@ -75,17 +74,16 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDTO updateStudent(Long id , String firstName, String lastName,
-                                 Long national_code, String address, String college_name) {
+    public StudentDTO updateStudent(Long id, Student student) {
         Student stud = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found !"));
-        College clg = collegeRepository.findByName(college_name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID " + id + " not found !"));
+        College clg = collegeRepository.findByName(student.getClg().getName())
+                .orElseThrow(() -> new CollegeNotFoundException("college with ID " + student.getClg().getName() + " not found !"));
 
-        stud.setStudent_name(firstName);
-        stud.setStudent_lastName(lastName);
-        stud.setNational_code(national_code);
-        stud.setAddress(address);
+        stud.setStudent_name(student.getStudent_name());
+        stud.setStudent_lastName(student.getStudent_lastName());
+        stud.setNational_code(student.getNational_code());
+        stud.setAddress(student.getAddress());
         stud.setClg(clg);
 
         Student savedStudent = studentRepository.save(stud);
