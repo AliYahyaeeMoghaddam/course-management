@@ -11,64 +11,48 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleGeneralException(Exception ex , WebRequest request) {
-
+    public ResponseEntity<ErrorDetails> handleGeneralException(Exception ex , WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 "internal server error !" ,
                 request.getDescription(false)
         );
-
-        return new ResponseEntity<>(errorDetails.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ProfessorNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleProfessorNotFoundException(Exception ex, WebRequest request) {
-
+    public ResponseEntity<ErrorDetails> handleProfessorNotFoundException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 ex.getMessage(),
                 request.getDescription(false)
         );
-
-        return new ResponseEntity<>(errorDetails.toString(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CollegeNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleCollegeNotFoundException(Exception ex, WebRequest request) {
-
+    public ResponseEntity<ErrorDetails> handleCollegeNotFoundException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 ex.getMessage(),
                 request.getDescription(false)
-
         );
-
-        return new ResponseEntity<>(errorDetails.toString(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CourseNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleCourseNotFoundException(Exception ex, WebRequest request) {
-
+    public ResponseEntity<ErrorDetails> handleCourseNotFoundException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 ex.getMessage(),
                 request.getDescription(false)
         );
-
-        return new ResponseEntity<>(errorDetails.toString(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(StudentNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleStudentNotFoundException(Exception ex, WebRequest request) {
-
+    public ResponseEntity<ErrorDetails> handleStudentNotFoundException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 ex.getMessage(),
                 request.getDescription(false)
         );
-
-        return new ResponseEntity<>(errorDetails.toString(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
-
 }
+

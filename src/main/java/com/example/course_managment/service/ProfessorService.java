@@ -38,14 +38,21 @@ public class ProfessorService {
 
     @Transactional
     public ProfessorDTO createProfessor(Professor professor) {
-        College clg = collegeRepository.findByName(professor.getCollege().getName())
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + professor.getCollege().getName() + "not found !"));
 
         Professor prof = new Professor();
-        prof.setProf_name(professor.getProf_name());
-        prof.setProf_lastName(professor.getProf_lastName());
-        prof.setNational_code(professor.getNational_code());
-        prof.setCollege(clg);
+
+        if (professor.getCollege() != null) {
+            College clg = collegeRepository.findByName(professor.getCollege().getName())
+                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + professor.getCollege().getName() + " not found !"));
+            prof.setCollege(clg);
+        }
+
+        if(!professor.getProf_name().isEmpty())
+            prof.setProf_name(professor.getProf_name());
+        if(!professor.getProf_lastName().isEmpty())
+            prof.setProf_lastName(professor.getProf_lastName());
+        if(professor.getNational_code() != 0)
+            prof.setNational_code(professor.getNational_code());
 
         Professor savedProfessor = professorRepository.save(prof);
         return ProfessorMapper.toDTO(savedProfessor);
@@ -62,12 +69,14 @@ public class ProfessorService {
     @Transactional
     public ProfessorDTO getProfessorById(Long id){
         Professor professor = professorRepository.findById(id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + id + "not found !"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + id + " not found !"));
         return ProfessorMapper.toDTO(professor);
     }
 
     @Transactional
     public List<ProfessorDTO> getProfessorsByCollegeName(String college_name){
+        if(collegeRepository.findByName(college_name).isEmpty())
+            throw new CollegeNotFoundException("College with name " + college_name + " not found !");
         return professorRepository.findByCollegeName(college_name)
                 .stream()
                 .map(ProfessorMapper::toDTO)
@@ -77,14 +86,19 @@ public class ProfessorService {
     @Transactional
     public ProfessorDTO updateProfessor(Long id, Professor professor) {
         Professor prof = professorRepository.findById(id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + id + "not found !"));
-        College clg = collegeRepository.findByName(professor.getCollege().getName())
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + professor.getCollege().getName() + "not found !"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + id + " not found !"));
+        if(professor.getCollege() != null) {
+            College clg = collegeRepository.findByName(professor.getCollege().getName())
+                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + professor.getCollege().getName() + " not found !"));
+            prof.setCollege(clg);
+        }
 
-        prof.setProf_name(professor.getProf_name());
-        prof.setProf_lastName(professor.getProf_lastName());
-        prof.setNational_code(professor.getNational_code());
-        prof.setCollege(clg);
+        if(!professor.getProf_name().isEmpty())
+            prof.setProf_name(professor.getProf_name());
+        if(!professor.getProf_lastName().isEmpty())
+            prof.setProf_lastName(professor.getProf_lastName());
+        if(professor.getNational_code() != 0)
+            prof.setNational_code(professor.getNational_code());
 
         Professor savedProfessor = professorRepository.save(prof);
         return ProfessorMapper.toDTO(savedProfessor);
@@ -92,13 +106,14 @@ public class ProfessorService {
 
     @Transactional
     public void deleteProfessor(Long id){
-        professorRepository.deleteById(id);
+        if(professorRepository.findById(id).isPresent())
+            professorRepository.deleteById(id);
     }
 
     @Transactional
     public ProfessorDTO AddingStudentByProfessor (Long prof_id, Long student_id){
         Professor professor = professorRepository.findById(prof_id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + prof_id + " not found !"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + prof_id + " not found !"));
         Student student = studentRepository.findById(student_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + student_id + " not found !"));
 
@@ -111,11 +126,12 @@ public class ProfessorService {
     @Transactional
     public ProfessorDTO DeleteStudentByProfessor (Long prof_id, Long student_id){
         Professor professor = professorRepository.findById(prof_id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + prof_id + "not found !"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + prof_id + " not found !"));
         Student student = studentRepository.findById(student_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + student_id + " not found !"));
 
-        professor.getStudents().remove(student);
+        if(professor.getStudents().contains(student))
+            professor.getStudents().remove(student);
 
         Professor savedProfessor = professorRepository.save(professor);
         return ProfessorMapper.toDTO(savedProfessor);
@@ -125,7 +141,9 @@ public class ProfessorService {
     @Transactional
     public List<StudentDTO> getStudentsOfProfessor(Long prof_id){
         Professor professor = professorRepository.findById(prof_id)
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + prof_id + "not found !"));
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + prof_id + " not found !"));
+        if(professor.getStudents().isEmpty())
+            throw new StudentNotFoundException("Students not found !");
         return professor.getStudents()
                 .stream()
                 .map(StudentMapper::toDTO)

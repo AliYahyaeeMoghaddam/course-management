@@ -24,7 +24,7 @@ public class GradeService {
     public GradeCourseDTO addGrade(GradeCourse gradeCourse) {
         Optional<GradeCourse> gradeCrs = gradeRepository.findByStudentId(gradeCourse.getStudent().getStudent_id());
 
-        if (!gradeCrs.isPresent()) {
+        if (gradeCrs.isEmpty()) {
             throw new RuntimeException("grade course not found");
         }
 

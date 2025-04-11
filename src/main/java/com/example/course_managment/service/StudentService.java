@@ -36,15 +36,23 @@ public class StudentService {
 
     @Transactional
     public StudentDTO createStudent(Student student) {
-        College college = collegeRepository.findByName(student.getClg().getName())
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + student.getClg().getName() + "not found !"));
 
         Student stud = new Student();
-        stud.setStudent_name(student.getStudent_name());
-        stud.setStudent_lastName(student.getStudent_lastName());
-        stud.setNational_code(student.getNational_code());
-        stud.setAddress(student.getAddress());
-        stud.setClg(college);
+
+        if(student.getClg() == null) {
+            College college = collegeRepository.findByName(student.getClg().getName())
+                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + student.getClg().getName() + " not found !"));
+            stud.setClg(college);
+        }
+
+        if(!student.getStudent_name().isEmpty())
+            stud.setStudent_name(student.getStudent_name());
+        if(!student.getStudent_lastName().isEmpty())
+            stud.setStudent_lastName(student.getStudent_lastName());
+        if(student.getNational_code() != 0)
+            stud.setNational_code(student.getNational_code());
+       if(!student.getAddress().isEmpty())
+            stud.setAddress(student.getAddress());
 
         Student savedStudent = studentRepository.save(stud);
         return StudentMapper.toDTO(savedStudent);
@@ -59,6 +67,8 @@ public class StudentService {
 
     @Transactional
     public List<StudentDTO> getAllStudents() {
+        if (studentRepository.findAll().isEmpty())
+            throw new StudentNotFoundException("Students not found !");
         return studentRepository.findAll()
                 .stream()
                 .map(StudentMapper::toDTO)
@@ -67,6 +77,8 @@ public class StudentService {
 
     @Transactional
     public List<StudentDTO> getStudentsByCollegeName(String college_name) {
+        if(collegeRepository.findByName(college_name).isEmpty())
+            throw new CollegeNotFoundException("College with name " + college_name + " not found !");
         return studentRepository.findStudentByClgName(college_name)
                 .stream()
                 .map(StudentMapper::toDTO)
@@ -77,14 +89,20 @@ public class StudentService {
     public StudentDTO updateStudent(Long id, Student student) {
         Student stud = studentRepository.findById(id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + id + " not found !"));
-        College clg = collegeRepository.findByName(student.getClg().getName())
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID " + student.getClg().getName() + " not found !"));
+        if(student.getClg() != null) {
+            College clg = collegeRepository.findByName(student.getClg().getName())
+                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + student.getClg().getName() + " not found !"));
+            stud.setClg(clg);
+        }
 
-        stud.setStudent_name(student.getStudent_name());
-        stud.setStudent_lastName(student.getStudent_lastName());
-        stud.setNational_code(student.getNational_code());
-        stud.setAddress(student.getAddress());
-        stud.setClg(clg);
+        if(!student.getStudent_name().isEmpty())
+            stud.setStudent_name(student.getStudent_name());
+        if(!student.getStudent_lastName().isEmpty())
+            stud.setStudent_lastName(student.getStudent_lastName());
+        if(student.getNational_code() != 0)
+            stud.setNational_code(student.getNational_code());
+        if(!student.getAddress().isEmpty())
+            stud.setAddress(student.getAddress());
 
         Student savedStudent = studentRepository.save(stud);
         return StudentMapper.toDTO(savedStudent);
@@ -92,7 +110,10 @@ public class StudentService {
 
     @Transactional
     public void deleteStudent(Long id) {
-        studentRepository.deleteById(id);
+        if(studentRepository.findById(id).isPresent())
+            studentRepository.deleteById(id);
+        else throw new StudentNotFoundException("Student with ID " + id + " not found !");
+
     }
 
     @Transactional
@@ -115,7 +136,8 @@ public class StudentService {
         Course crs = courseRepository.findByCourseName(course_name)
                 .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_name + " not found !"));
 
-        stud.getCourses().remove(crs);
+        if(stud.getCourses().contains(crs))
+            stud.getCourses().remove(crs);
 
         Student savedStudent = studentRepository.save(stud);
         return StudentMapper.toDTO(savedStudent);
@@ -126,6 +148,8 @@ public class StudentService {
         Student stud = studentRepository.findById(student_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + student_id + " not found !"));
 
+        if(stud.getCourses().isEmpty())
+            throw new CourseNotFoundException("Courses not found !");
         return stud.getCourses()
                 .stream()
                 .map(CourseMapper::toDTO)

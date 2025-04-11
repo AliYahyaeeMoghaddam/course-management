@@ -36,16 +36,24 @@ public class CourseService {
 
     @Transactional
     public CourseDTO createCourse(Course course) {
-        College clg = collegeRepository.findByName(course.getCollege().getName())
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + course.getCollege().getName() + "not found !"));
-        Professor prof = professorRepository.findById(course.getProfessor().getProf_id())
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + course.getProfessor().getProf_id() + "not found !"));
 
         Course crs = new Course();
-        crs.setCourse_name(course.getCourse_name());
-        crs.setUnit(course.getUnit());
+        if(course.getCollege() != null) {
+            College clg = collegeRepository.findByName(course.getCollege().getName())
+                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + course.getCollege().getName() + " not found !"));
         crs.setCollege(clg);
-        crs.setProfessor(prof);
+        }
+        if (course.getProfessor() != null) {
+            Professor prof = professorRepository.findById(course.getProfessor().getProf_id())
+                    .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + course.getProfessor().getProf_id() + " not found !"));
+
+            crs.setProfessor(prof);
+        }
+
+        if(course.getCourse_name() != null)
+            crs.setCourse_name(course.getCourse_name());
+        if(course.getUnit() != 0)
+            crs.setUnit(course.getUnit());
 
         Course savedCourse = courseRepository.save(crs);
         return CourseMapper.toDTO(savedCourse);
@@ -62,12 +70,14 @@ public class CourseService {
     @Transactional
     public CourseDTO getCourseByName(String name) {
         Course crs = courseRepository.findByCourseName(name)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + name + "not found !"));
+                .orElseThrow(() -> new CourseNotFoundException("Course with name " + name + " not found !"));
         return CourseMapper.toDTO(crs);
     }
 
     @Transactional
     public List<CourseDTO> getCourseByCollegeName(String college_name) {
+        if (collegeRepository.findByName(college_name).isEmpty())
+            throw new CollegeNotFoundException("College with name " + college_name + " not found !");
         return courseRepository.findByCollegeName(college_name)
                 .stream()
                 .map(CourseMapper::toDTO)
@@ -76,6 +86,8 @@ public class CourseService {
 
     @Transactional
     public List<CourseDTO> getCourseByProfessorId(Long professor_id) {
+        if (professorRepository.findById(professor_id).isEmpty())
+            throw new ProfessorNotFoundException("Professor with id " + professor_id + " not found !");
         return courseRepository.findByProfessorId(professor_id)
                 .stream()
                 .map(CourseMapper::toDTO)
@@ -85,16 +97,22 @@ public class CourseService {
     @Transactional
     public CourseDTO updateCourse(String name ,Course course) {
         Course crs = courseRepository.findByCourseName(name)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID" + name + "not found !"));
-        College clg = collegeRepository.findByName(course.getCollege().getName())
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + course.getCollege().getName() + "not found !"));
-        Professor prof = professorRepository.findById(course.getProfessor().getProf_id())
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + course.getProfessor().getProf_id() + "not found !"));
+                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + name + " not found !"));
+        if (course.getCollege() != null) {
+            College clg = collegeRepository.findByName(course.getCollege().getName())
+                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + course.getCollege().getName() + " not found !"));
+            crs.setCollege(clg);
+        }
+        if (course.getProfessor() != null) {
+            Professor prof = professorRepository.findById(course.getProfessor().getProf_id())
+                    .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + course.getProfessor().getProf_id() + " not found !"));
+            crs.setProfessor(prof);
+        }
 
-        crs.setCourse_name(course.getCourse_name());
-        crs.setUnit(course.getUnit());
-        crs.setCollege(clg);
-        crs.setProfessor(prof);
+        if (course.getCourse_name() != null)
+            crs.setCourse_name(course.getCourse_name());
+        if (course.getUnit() != 0)
+            crs.setUnit(course.getUnit());
 
         Course savedCourse = courseRepository.save(crs);
         return CourseMapper.toDTO(savedCourse);
@@ -102,7 +120,8 @@ public class CourseService {
 
     @Transactional
     public void deleteCourse(String name) {
-        courseRepository.deleteByCourseName(name);
+        if(courseRepository.findByCourseName(name).isPresent())
+            courseRepository.deleteByCourseName(name);
     }
 
 }

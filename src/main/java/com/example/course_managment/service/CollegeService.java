@@ -29,12 +29,17 @@ public class CollegeService {
 
     @Transactional
     public CollegeDTO createCollege(College college) {
-        Professor prof = professorRepository.findById(college.getClg_manager().getProf_id())
-                .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + college.getClg_manager().getProf_id() + " not found !"));
 
         College clg = new College();
-        clg.setName(college.getName());
-        clg.setClg_manager(prof);
+        if(college.getName() != null)
+            clg.setName(college.getName());
+
+        if(college.getClg_manager() != null){
+            Professor prof = professorRepository.findById(college.getClg_manager().getProf_id())
+                    .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + college.getClg_manager().getProf_id() + " not found !"));
+
+            clg.setClg_manager(prof);
+        }
 
         College savedCollege = collegeRepository.save(clg);
         return CollegeMapper.toDTO(savedCollege);
@@ -42,35 +47,36 @@ public class CollegeService {
 
     @Transactional
     public CollegeDTO getCollegeByName(String name) {
-        College college = collegeRepository.findByName(name)
-                .orElseThrow(() -> new CollegeNotFoundException("college with ID" + name + "not found !"));
-        return CollegeMapper.toDTO(college);
+            College college = collegeRepository.findByName(name)
+                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + name + " not found !"));
+            return CollegeMapper.toDTO(college);
+
     }
 
     @Transactional
     public List<CollegeDTO> getAllColleges() {
+        if(collegeRepository.findAll().isEmpty()) {
+            throw new CollegeNotFoundException("No college found !");
+        }
         return collegeRepository.findAll()
                 .stream()
                 .map(CollegeMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-//    @Transactional
-//    public CollegeDTO getCollegeByName(String name) {
-//        College college = collegeRepository.findByName(name)
-//                .orElseThrow(() -> new CollegeNotFoundException("college with name" + name + "not found !"));
-//        return CollegeMapper.toDTO(college);
-//    }
-
     @Transactional
     public CollegeDTO updateCollege(String name, College college) {
         College clg = collegeRepository.findByName(name)
-                        .orElseThrow(() -> new CollegeNotFoundException("college with ID" + name + "not found !"));
-        Professor prof = professorRepository.findById(college.getClg_manager().getProf_id())
-                        .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID" + college.getClg_manager().getProf_id() + "not found !"));
+                        .orElseThrow(() -> new CollegeNotFoundException("college with ID " + name + " not found !"));
+        if (college.getClg_manager() != null) {
+            Professor prof = professorRepository.findById(college.getClg_manager().getProf_id())
+                    .orElseThrow(() -> new ProfessorNotFoundException("Professor with ID " + college.getClg_manager().getProf_id() + " not found !"));
 
-        clg.setName(college.getName());
-        clg.setClg_manager(prof);
+            clg.setClg_manager(prof);
+        }
+
+        if(college.getName() != null)
+            clg.setName(college.getName());
 
         College savedCollege = collegeRepository.save(clg);
         return CollegeMapper.toDTO(savedCollege);
@@ -78,7 +84,8 @@ public class CollegeService {
 
     @Transactional
     public void deleteCollege(String name) {
-        collegeRepository.deleteByName(name);
+        if(collegeRepository.findByName(name).isPresent())
+            collegeRepository.deleteByName(name);
     }
 
 }
