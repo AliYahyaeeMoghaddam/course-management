@@ -17,20 +17,26 @@ public class CourseMapper {
         dto.setCourse_name(course.getCourse_name());
         dto.setUnit(course.getUnit());
 
-        List<Long> studentIds = course.getStudents()
-                .stream()
-                .map(Student::getStudent_id)
-                .collect(Collectors.toList());
-        dto.setStudentIds(studentIds);
+        if(!course.getStudents().isEmpty()) {
+            List<Long> studentIds = course.getStudents()
+                    .stream()
+                    .map(Student::getStudent_id)
+                    .collect(Collectors.toList());
+            dto.setStudentIds(studentIds);
+        }
 
-        dto.setCollegeName(course.getCollege().getName());
-        dto.setProfessorId(course.getProfessor().getProf_id());
+        if(course.getCollege().getName() != null)
+            dto.setCollegeName(course.getCollege().getName());
+        if(course.getProfessor() != null)
+            dto.setProfessorId(course.getProfessor().getProf_id());
 
-        List<Long> gradeCourseIds = course.getGradeCourse()
-                .stream()
-                .map(GradeCourse::getId)
-                .collect(Collectors.toList());
-        dto.setGradeCourseIds(gradeCourseIds);
+        if(!course.getGradeCourse().isEmpty()) {
+            List<Long> gradeCourseIds = course.getGradeCourse()
+                    .stream()
+                    .map(GradeCourse::getId)
+                    .collect(Collectors.toList());
+            dto.setGradeCourseIds(gradeCourseIds);
+        }
 
         return dto;
     }

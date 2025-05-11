@@ -18,30 +18,38 @@ public class CollegeMapper {
         CollegeDTO dto = new CollegeDTO();
         dto.setName(college.getName());
 
-        Professor professor = college.getClg_manager();
-        ProfessorSimpleDTO professorSimpleDTO = new ProfessorSimpleDTO();
-        professorSimpleDTO.setProf_id(professor.getProf_id());
-        professorSimpleDTO.setProf_name(professor.getProf_name());
-        professorSimpleDTO.setProf_lastName(professor.getProf_lastName());
-        dto.setClg_manager(professorSimpleDTO);
+        if(college.getClg_manager() != null) {
+            Professor professor = college.getClg_manager();
+            ProfessorSimpleDTO professorSimpleDTO = new ProfessorSimpleDTO();
+            professorSimpleDTO.setProf_id(professor.getProf_id());
+            professorSimpleDTO.setProf_name(professor.getProf_name());
+            professorSimpleDTO.setProf_lastName(professor.getProf_lastName());
+            dto.setClg_manager(professorSimpleDTO);
+        }
 
-        List<Long> studentIds = college.getStudents()
-                .stream()
-                .map(Student::getStudent_id)
-                .collect(Collectors.toList());
-        dto.setStudents(studentIds);
+        if(!college.getStudents().isEmpty()) {
+            List<Long> studentIds = college.getStudents()
+                    .stream()
+                    .map(Student::getStudent_id)
+                    .collect(Collectors.toList());
+            dto.setStudents(studentIds);
+        }
 
-        List<String> courseNames = college.getCourses()
-                .stream()
-                .map(Course::getCourse_name)
-                .collect(Collectors.toList());
-        dto.setCourses(courseNames);
+        if(!college.getCourses().isEmpty()) {
+            List<String> courseNames = college.getCourses()
+                    .stream()
+                    .map(Course::getCourse_name)
+                    .collect(Collectors.toList());
+            dto.setCourses(courseNames);
+        }
 
-        List<Long> professorIds = college.getProfessors()
-                .stream()
-                .map(Professor::getProf_id)
-                .collect(Collectors.toList());
-        dto.setProfessors(professorIds);
+        if(!college.getProfessors().isEmpty()) {
+            List<Long> professorIds = college.getProfessors()
+                    .stream()
+                    .map(Professor::getProf_id)
+                    .collect(Collectors.toList());
+            dto.setProfessors(professorIds);
+        }
 
         return dto;
     }

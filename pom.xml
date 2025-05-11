@@ -67,6 +67,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -74,6 +80,12 @@
             <id>spring-release</id>
             <url>https://repo.spring.io/release</url>
         </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+
     </repositories>
 
     <build>

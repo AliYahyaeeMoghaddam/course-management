@@ -12,13 +12,14 @@ import java.util.List;
 public class Professor {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     @Pattern(regexp = "^[a-zA-Zآ-ی]+$")
     private String prof_name;
 
-    @Column(nullable = false , length = 48)
+    @Column(name = "prof_lastName",nullable = false , length = 48)
     @Pattern(regexp = "^[a-zA-Zآ-ی]+$")
     private String prof_lastName;
 

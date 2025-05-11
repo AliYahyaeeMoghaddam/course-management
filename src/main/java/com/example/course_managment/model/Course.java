@@ -19,7 +19,7 @@ public class Course {
     private List<Student> students = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "crs_id" , nullable = false)
+    @JoinColumn(name = "college_name" , nullable = false)
     private College college;
 
     @ManyToOne

@@ -19,25 +19,32 @@ public class StudentMapper {
         dto.setStudent_name(student.getStudent_name());
         dto.setStudent_lastName(student.getStudent_lastName());
 
-        List<String> courseNames = student.getCourses()
-                .stream()
-                .map(Course::getCourse_name)
-                .collect(Collectors.toList());
-        dto.setCourseNames(courseNames);
+        if(!student.getCourses().isEmpty()) {
+            List<String> courseNames = student.getCourses()
+                    .stream()
+                    .map(Course::getCourse_name)
+                    .collect(Collectors.toList());
+            dto.setCourseNames(courseNames);
+        }
 
-        dto.setClgName(student.getClg().getName());
+        if(student.getClg() != null)
+            dto.setClgName(student.getClg().getName());
 
-        List<Long> professorIds = student.getProfessors()
-                .stream()
-                .map(Professor::getProf_id)
-                .collect(Collectors.toList());
-        dto.setProfessorIds(professorIds);
+        if(!student.getProfessors().isEmpty()) {
+            List<Long> professorIds = student.getProfessors()
+                    .stream()
+                    .map(Professor::getProf_id)
+                    .collect(Collectors.toList());
+            dto.setProfessorIds(professorIds);
+        }
 
-        List<Long> gradeIds = student.getGradeCourses()
-                .stream()
-                .map(GradeCourse::getId)
-                .collect(Collectors.toList());
-        dto.setGradeCourseIds(gradeIds);
+        if(!student.getGradeCourses().isEmpty()) {
+            List<Long> gradeIds = student.getGradeCourses()
+                    .stream()
+                    .map(GradeCourse::getId)
+                    .collect(Collectors.toList());
+            dto.setGradeCourseIds(gradeIds);
+        }
 
         return dto;
     }

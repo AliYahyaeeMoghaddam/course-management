@@ -16,7 +16,7 @@ public class College {
     private String name;
 
     @OneToOne
-    @JoinColumn(name = "dean_id")
+    @JoinColumn(name = "dean_id",nullable = true)
     private Professor clg_manager;
 
     @OneToMany(mappedBy = "clg" , cascade = CascadeType.ALL)

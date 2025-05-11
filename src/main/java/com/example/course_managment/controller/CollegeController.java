@@ -4,6 +4,7 @@ import com.example.course_managment.dto.CollegeDTO;
 import com.example.course_managment.model.College;
 import com.example.course_managment.service.CollegeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +22,9 @@ public class CollegeController {
     }
 
     @PostMapping
-    public ResponseEntity<CollegeDTO> createCollege(@RequestBody College college) {
+    public ResponseEntity<?> createCollege(@RequestBody College college) {
         CollegeDTO clg = collegeService.createCollege(college);
-        return ResponseEntity.ok(clg);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping
@@ -36,12 +37,7 @@ public class CollegeController {
         CollegeDTO clg = collegeService.getCollegeByName(name);
         return ResponseEntity.ok(clg);
     }
-
-//    @GetMapping("/{name}")
-//    public ResponseEntity<CollegeDTO> getCollegeByName(@PathVariable String name) {
-//        CollegeDTO clg = collegeService.getCollegeByName(name);
-//        return ResponseEntity.ok(clg);
-//    }
+    
 
     @PutMapping("/{name}")
     public ResponseEntity<CollegeDTO> updateCollege(@PathVariable String name,

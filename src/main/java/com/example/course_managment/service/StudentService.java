@@ -101,7 +101,7 @@ public class StudentService {
             stud.setStudent_lastName(student.getStudent_lastName());
         if(student.getNational_code() != 0)
             stud.setNational_code(student.getNational_code());
-        if(!student.getAddress().isEmpty())
+        if(student.getStudent_name() != null)
             stud.setAddress(student.getAddress());
 
         Student savedStudent = studentRepository.save(stud);

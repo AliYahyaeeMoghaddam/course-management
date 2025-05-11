@@ -40,7 +40,7 @@ public class CourseService {
         Course crs = new Course();
         if(course.getCollege() != null) {
             College clg = collegeRepository.findByName(course.getCollege().getName())
-                    .orElseThrow(() -> new CollegeNotFoundException("college with ID " + course.getCollege().getName() + " not found !"));
+                    .orElseThrow(() -> new CollegeNotFoundException("college with name " + course.getCollege().getName() + " not found !"));
         crs.setCollege(clg);
         }
         if (course.getProfessor() != null) {
@@ -61,6 +61,8 @@ public class CourseService {
 
     @Transactional
     public List<CourseDTO> getAllCourses() {
+        if(courseRepository.findAll().isEmpty())
+            throw new CourseNotFoundException("Course not found !");
         return courseRepository.findAll()
                 .stream()
                 .map(CourseMapper::toDTO)
