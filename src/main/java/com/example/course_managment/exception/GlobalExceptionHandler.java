@@ -54,5 +54,14 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(TheCollegeHasAManager.class)
+    public ResponseEntity<ErrorDetails> handleTheCollegeHasAManagerException(Exception ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(errorDetails, HttpStatus.IM_USED);
+    }
 }
 

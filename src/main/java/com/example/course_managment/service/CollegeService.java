@@ -1,9 +1,12 @@
 package com.example.course_managment.service;
 
 import com.example.course_managment.dto.CollegeDTO;
+import com.example.course_managment.dto.ProfessorDTO;
 import com.example.course_managment.exception.CollegeNotFoundException;
 import com.example.course_managment.exception.ProfessorNotFoundException;
+import com.example.course_managment.exception.TheCollegeHasAManager;
 import com.example.course_managment.mapper.CollegeMapper;
+import com.example.course_managment.mapper.ProfessorMapper;
 import com.example.course_managment.model.College;
 import com.example.course_managment.model.Professor;
 import com.example.course_managment.repository.CollegeRepository;
@@ -86,6 +89,46 @@ public class CollegeService {
     public void deleteCollege(String name) {
         if(collegeRepository.findByName(name).isPresent())
             collegeRepository.deleteByName(name);
+    }
+
+    @Transactional
+    public CollegeDTO setCollegeManager(Long prof_id , String college_name) {
+        if(professorRepository.findById(prof_id).isEmpty())
+            throw new ProfessorNotFoundException("Professor with ID " + prof_id + " not found !");
+        if(collegeRepository.findByName(college_name).isEmpty())
+            throw new CollegeNotFoundException("College with name " + college_name + " not found !");
+
+        Professor manager = professorRepository.findById(prof_id).get();
+        College college = collegeRepository.findByName(college_name).get();
+
+        if(college.getClg_manager() == null)
+            college.setClg_manager(manager);
+        else
+            throw new TheCollegeHasAManager("The college has a manager!");
+        return CollegeMapper.toDTO(collegeRepository.save(college));
+    }
+
+    @Transactional
+    public ProfessorDTO getManager(String college_name) {
+        if(collegeRepository.findByName(college_name).isPresent()){
+            College college = collegeRepository.findByName(college_name).get();
+            if(college.getClg_manager() != null) {
+                Professor manager = college.getClg_manager();
+                return ProfessorMapper.toDTO(manager);
+            }
+            else
+                throw new ProfessorNotFoundException("The college does not have a manager!");
+        }
+        throw new CollegeNotFoundException("College with name " + college_name + " not found !");
+    }
+
+    @Transactional
+    public void deleteManager(String college_name) {
+        if(collegeRepository.findByName(college_name).isEmpty())
+            throw new CollegeNotFoundException("College with name " + college_name + " not found !");
+        College clg = collegeRepository.findByName(college_name).get();
+        clg.setClg_manager(null);
+        collegeRepository.save(clg);
     }
 
 }
