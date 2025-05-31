@@ -43,6 +43,10 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<GradeCourse> gradeCourses = new ArrayList<>();
 
+
+    @OneToOne(mappedBy = "student")
+    private AverageStudent averageStudent;
+
     public Student() {}
     public Student(String student_name, String student_lastName, Long national_code, String Address , College clg) {
         this.student_name = student_name;

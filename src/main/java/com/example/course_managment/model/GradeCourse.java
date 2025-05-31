@@ -13,12 +13,12 @@ public class GradeCourse {
     @JoinColumn(name = "Student_id")
     private Student student;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
     @Column(nullable = false)
-    private Long garde;
+    private Double garde;
 
     public Long getId() {
         return id;
@@ -44,11 +44,11 @@ public class GradeCourse {
         this.course = course;
     }
 
-    public Long getGarde() {
+    public Double getGarde() {
         return garde;
     }
 
-    public void setGarde(Long garde) {
+    public void setGarde(Double garde) {
         this.garde = garde;
     }
 }

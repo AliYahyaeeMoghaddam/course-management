@@ -2,7 +2,6 @@ package com.example.course_managment.controller;
 
 import com.example.course_managment.dto.CourseDTO;
 import com.example.course_managment.dto.StudentDTO;
-import com.example.course_managment.model.Course;
 import com.example.course_managment.model.Student;
 import com.example.course_managment.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
