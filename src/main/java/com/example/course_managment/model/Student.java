@@ -127,4 +127,12 @@ public class Student {
     public void setGradeCourses(List<GradeCourse> gradeCourses) {
         this.gradeCourses = gradeCourses;
     }
+
+    public AverageStudent getAverageStudent() {
+        return averageStudent;
+    }
+
+    public void setAverageStudent(AverageStudent averageStudent) {
+        this.averageStudent = averageStudent;
+    }
 }
