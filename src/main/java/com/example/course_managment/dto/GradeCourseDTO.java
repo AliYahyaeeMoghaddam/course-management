@@ -5,7 +5,7 @@ public class GradeCourseDTO {
     private Long id;
     private Long studentId;
     private String courseName;
-    private Long garde;
+    private Double garde;
 
     public Long getId() {
         return id;
@@ -15,11 +15,11 @@ public class GradeCourseDTO {
         this.id = id;
     }
 
-    public Long getGarde() {
+    public Double getGarde() {
         return garde;
     }
 
-    public void setGarde(Long garde) {
+    public void setGarde(Double garde) {
         this.garde = garde;
     }
 

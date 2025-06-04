@@ -29,14 +29,8 @@ public class CourseMapper {
             dto.setCollegeName(course.getCollege().getName());
         if(course.getProfessor() != null)
             dto.setProfessorId(course.getProfessor().getProf_id());
-
-        if(!course.getGradeCourse().isEmpty()) {
-            List<Long> gradeCourseIds = course.getGradeCourse()
-                    .stream()
-                    .map(GradeCourse::getId)
-                    .collect(Collectors.toList());
-            dto.setGradeCourseIds(gradeCourseIds);
-        }
+        if(course.getGradeCourse() != null)
+            dto.setGradeCourseIds(course.getGradeCourse().getId());
 
         return dto;
     }
