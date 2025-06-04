@@ -9,7 +9,6 @@ import com.example.course_managment.model.Student;
 import com.example.course_managment.repository.AverageCollegeRepository;
 import com.example.course_managment.repository.CollegeRepository;
 import com.example.course_managment.repository.StudentRepository;
-import jakarta.persistence.Id;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,6 @@ public class AverageCollegeService {
     public AverageCollegeDTO setAverageCollege(String college_name) {
 
         AverageCollege average = new AverageCollege();
-
-//        average.setId(averageCollege.getId());
 
         if(college_name.isEmpty())
             throw new CollegeNotFoundException("college is empty");

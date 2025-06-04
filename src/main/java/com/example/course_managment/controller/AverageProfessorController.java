@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AverageProfessorController {
 
     final private AverageProfessorService averageProfessorService;
-    
+
     @Autowired
     public AverageProfessorController (AverageProfessorService averageProfessorService){
         this.averageProfessorService = averageProfessorService;

@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table("Average_professor")
+@Table(name = "Average_professor")
 public class AverageProfessor {
 
     @Id
