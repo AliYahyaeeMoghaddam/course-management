@@ -26,8 +26,10 @@ public class AverageStudentService {
         AverageStudent average = new AverageStudent();
         double ave = 0.0;
         double sum = 0.0;
+        int i = 0;
         for (var grade : averageStudent.getStudent().getCourses()) {
-            sum = sum + grade.getGradeCourse().getGarde();
+            sum = sum + grade.getGradeCourse().get(i).getGarde();
+            i++;
         }
         int count = averageStudent.getStudent().getCourses().size();
         ave = sum / count;

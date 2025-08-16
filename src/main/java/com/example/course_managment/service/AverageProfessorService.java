@@ -1,6 +1,7 @@
 package com.example.course_managment.service;
 
 import com.example.course_managment.dto.AverageProfessorDTO;
+import com.example.course_managment.exception.CourseNotFoundException;
 import com.example.course_managment.mapper.AverageProfessorMapper;
 import com.example.course_managment.model.AverageProfessor;
 import com.example.course_managment.model.Course;
@@ -40,8 +41,9 @@ public class AverageProfessorService {
 
         Professor prof = professorRepository.findById(professorId)
                 .orElseThrow(() -> new RuntimeException("Professor Not Found"));
-        Course crs = courseRepository.findByCourseName(courseName)
-                .orElseThrow(() -> new RuntimeException("Course Not Found"));
+        Course crs = courseRepository.findByCourseName(courseName);
+        if (crs == null)
+            throw new CourseNotFoundException("Course Not Found");
 
         List<Student> students = studentRepository.findAll();
 

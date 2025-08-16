@@ -1,5 +1,7 @@
 package com.example.course_managment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +27,17 @@ public class Student {
     private String Address;
 
     @Column(nullable = false)
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "stud_crs" ,
-            joinColumns = @JoinColumn(name = "stud_id") ,
-            inverseJoinColumns = @JoinColumn(name = "crs_id")
+            name = "course_student" ,
+            joinColumns = @JoinColumn(name = "student_id") ,
+            inverseJoinColumns = @JoinColumn(name = "course_name")
     )
     private List<Course> courses = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "clg_id" , nullable = false)
-    private College  clg;
+    private College clg;
 
     @ManyToMany(mappedBy = "students")
     private List<Professor> professors = new ArrayList<>();

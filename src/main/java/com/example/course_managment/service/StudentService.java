@@ -39,10 +39,12 @@ public class StudentService {
 
         Student stud = new Student();
 
-        if(student.getClg() == null) {
+        if(student.getClg() != null) {
             College college = collegeRepository.findByName(student.getClg().getName())
                     .orElseThrow(() -> new CollegeNotFoundException("college with ID " + student.getClg().getName() + " not found !"));
             stud.setClg(college);
+        } else {
+            throw new CollegeNotFoundException("College is required!");
         }
 
         if(!student.getStudent_name().isEmpty())
@@ -120,8 +122,9 @@ public class StudentService {
     public StudentDTO CourseRegistrationByStudent (Long stud_id, String course_name) {
         Student stud = studentRepository.findById(stud_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
-        Course crs = courseRepository.findByCourseName(course_name)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_name + " not found !"));
+        Course crs = courseRepository.findByCourseName(course_name);
+        if (crs == null)
+            throw new CourseNotFoundException("Course with name " + course_name + " not found !");
 
         stud.getCourses().add(crs);
 
@@ -133,8 +136,9 @@ public class StudentService {
     public StudentDTO DeletingCourseByStudent(Long stud_id, String course_name){
         Student stud = studentRepository.findById(stud_id)
                 .orElseThrow(() -> new StudentNotFoundException("Student with ID " + stud_id + " not found !"));
-        Course crs = courseRepository.findByCourseName(course_name)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + course_name + " not found !"));
+        Course crs = courseRepository.findByCourseName(course_name);
+        if (crs == null)
+            throw new CourseNotFoundException("Course with name " + course_name + " not found !");
 
         if(stud.getCourses().contains(crs))
             stud.getCourses().remove(crs);

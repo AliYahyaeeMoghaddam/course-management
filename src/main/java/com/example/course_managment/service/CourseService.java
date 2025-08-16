@@ -71,8 +71,9 @@ public class CourseService {
 
     @Transactional
     public CourseDTO getCourseByName(String name) {
-        Course crs = courseRepository.findByCourseName(name)
-                .orElseThrow(() -> new CourseNotFoundException("Course with name " + name + " not found !"));
+        Course crs = courseRepository.findByCourseName(name);
+        if (crs == null)
+            throw new CourseNotFoundException("Course with name " + name + " not found !");
         return CourseMapper.toDTO(crs);
     }
 
@@ -98,8 +99,9 @@ public class CourseService {
 
     @Transactional
     public CourseDTO updateCourse(String name ,Course course) {
-        Course crs = courseRepository.findByCourseName(name)
-                .orElseThrow(() -> new CourseNotFoundException("Course with ID " + name + " not found !"));
+        Course crs = courseRepository.findByCourseName(name);
+        if (crs == null)
+            throw new CourseNotFoundException("Course with name " + name + " not found !");
         if (course.getCollege() != null) {
             College clg = collegeRepository.findByName(course.getCollege().getName())
                     .orElseThrow(() -> new CollegeNotFoundException("college with ID " + course.getCollege().getName() + " not found !"));
@@ -122,7 +124,7 @@ public class CourseService {
 
     @Transactional
     public void deleteCourse(String name) {
-        if(courseRepository.findByCourseName(name).isPresent())
+        if(courseRepository.findByCourseName(name) != null)
             courseRepository.deleteByCourseName(name);
     }
 

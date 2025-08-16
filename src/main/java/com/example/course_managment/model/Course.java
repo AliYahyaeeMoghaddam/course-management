@@ -1,7 +1,7 @@
 package com.example.course_managment.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +23,11 @@ public class Course {
     private College college;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "professor_id")
     private Professor professor;
 
-    @OneToOne(mappedBy = "course")
-    //private List<GradeCourse> gradeCourse = new ArrayList<>();
-    private GradeCourse gradeCourse;
-
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<GradeCourse> gradeCourses = new ArrayList<>();
 
     public Course() {}
     public Course(String course_name, int unit, College college , Professor professor) {
@@ -79,11 +77,11 @@ public class Course {
         this.professor = professor;
     }
 
-    public GradeCourse getGradeCourse() {
-        return gradeCourse;
+    public List<GradeCourse> getGradeCourse() {
+        return gradeCourses;
     }
 
-    public void setGradeCourse(GradeCourse gradeCourse) {
-        this.gradeCourse = gradeCourse;
+    public void setGradeCourse(List<GradeCourse> gradeCourses) {
+        this.gradeCourses = gradeCourses;
     }
 }

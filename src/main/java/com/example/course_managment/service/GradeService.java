@@ -22,17 +22,30 @@ public class GradeService {
 
     @Transactional
     public GradeCourseDTO addGrade(GradeCourse gradeCourse) {
-        Optional<GradeCourse> gradeCrs = gradeRepository.findByStudentId(gradeCourse.getStudent().getStudent_id());
 
-        if (gradeCrs.isEmpty()) {
-            throw new RuntimeException("grade course not found");
+        if (gradeCourse.getStudent() == null || gradeCourse.getCourse() == null) {
+            throw new RuntimeException("Student or Course is required");
         }
 
-        GradeCourse grade_crs = gradeCrs.get();
-        grade_crs.setGarde(grade_crs.getGarde());
-        GradeCourse savedGrade = gradeRepository.save(grade_crs);
+        Optional<GradeCourse> existing = gradeRepository.findByStudentIdAndCourseCourseName(
+                gradeCourse.getStudent().getStudent_id(),
+                gradeCourse.getCourse().getCourse_name()
+        );
 
+        GradeCourse gradeCrs;
+        if (existing.isPresent()) {
+            gradeCrs = existing.get();
+            gradeCrs.setGarde(gradeCourse.getGarde());
+        } else {
+            gradeCrs = new GradeCourse();
+            gradeCrs.setStudent(gradeCourse.getStudent());
+            gradeCrs.setCourse(gradeCourse.getCourse());
+            gradeCrs.setGarde(gradeCourse.getGarde());
+        }
+
+        GradeCourse savedGrade = gradeRepository.save(gradeCrs);
         return GradeCourseMapper.toDTO(savedGrade);
     }
+
 
 }

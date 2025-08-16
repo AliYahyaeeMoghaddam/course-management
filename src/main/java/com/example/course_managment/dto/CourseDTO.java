@@ -9,7 +9,7 @@ public class CourseDTO {
     private List<Long> studentIds;
     private String collegeName;
     private Long professorId;
-    private Long gradeCourseId;
+    private List<Long> gradeCourseId;
 
 
     public String getCourse_name() {
@@ -52,11 +52,11 @@ public class CourseDTO {
         this.professorId = professorId;
     }
 
-    public Long getGradeCourseIds() {
+    public List<Long> getGradeCourseIds() {
         return gradeCourseId;
     }
 
-    public void setGradeCourseIds(Long gradeCourseId) {
+    public void setGradeCourseIds(List<Long> gradeCourseId) {
         this.gradeCourseId = gradeCourseId;
     }
 }

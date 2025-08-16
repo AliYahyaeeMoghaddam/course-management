@@ -1,5 +1,6 @@
 package com.example.course_managment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,14 +8,15 @@ import jakarta.persistence.*;
 public class GradeCourse {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "Student_id")
     private Student student;
 
-    @OneToOne
-    @JoinColumn(name = "course_id")
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
     @Column(nullable = false)

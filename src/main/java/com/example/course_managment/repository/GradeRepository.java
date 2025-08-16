@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface GradeRepository extends JpaRepository<GradeCourse , Long> {
     Optional<GradeCourse> findByStudentId(Long studentId);
+
+    Optional<GradeCourse> findByStudentIdAndCourseCourseName(Long studentId, String courseName);
 }
