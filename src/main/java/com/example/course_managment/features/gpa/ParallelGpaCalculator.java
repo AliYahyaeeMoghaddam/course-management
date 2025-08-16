@@ -31,7 +31,7 @@ public class ParallelGpaCalculator {
 
         BlockingQueue<Student> queue = new LinkedBlockingQueue<>();
 
-        // --- Level 1: محاسبه معدل
+        // --- Level 1
         int aveThreads = 8;
         ExecutorService aveExe = Executors.newFixedThreadPool(aveThreads);
 
@@ -71,13 +71,12 @@ public class ParallelGpaCalculator {
         aveExe.shutdown();
         aveExe.awaitTermination(5, TimeUnit.MINUTES);
 
-        // Poison pills
         int fileThreads = 4;
         for (int i = 0; i < fileThreads; i++) {
             queue.put(POISON_PILL);
         }
 
-        // --- Level 2: نوشتن فایل‌ها
+        // --- Level 2
         ExecutorService fileExe = Executors.newFixedThreadPool(fileThreads);
 
         for (int i = 0; i < fileThreads; i++) {
